@@ -6,9 +6,6 @@ export default function LoginPage() {
   // State yang menentukan apakah loading bar harus muncul atau tidak
   const [isLoading, setIsLoading] = useState(false)
 
-  // State yang menunjukkan jika ada kesalahan
-  const [isError, setIsError] = useState(false)
-
   // State yang menampung inputan user
   const [inputId, setInputId] = useState("")
   const [inputPassword, setInputPassword] = useState("")
