@@ -11,6 +11,8 @@ node_modules/
 # Ignore Python cache files
 __pycache__/
 
+backend/database/config.py
+
 # Ignore compiled JavaScript files
 *.js
 
