@@ -4,10 +4,12 @@ import "./index.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import App from "./App.tsx"
-import Dashboard from "./pages/Dashboard.tsx"
+import Home from "./pages/Home.tsx"
 import ErrorPage from "./pages/ErrorPage.tsx"
 import LoginPage from "./pages/LoginPage.tsx"
 import Register from "./pages/Register.tsx"
+import { Provider } from "react-redux"
+import { store } from "./store"
 
 
 const router = createBrowserRouter([
@@ -17,8 +19,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>
   },
   {
-    path: "/dashboard",
-    element: <Dashboard/>,
+    path: "/home",
+    element: <Home/>,
     errorElement: <ErrorPage/>
   },
   {
@@ -35,6 +37,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider>
   </React.StrictMode>,
 )

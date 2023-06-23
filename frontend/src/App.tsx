@@ -17,7 +17,7 @@ export default function App() {
     // Jika user sudah login, redirect ke halaman utama
     else
       setTimeout(() => {
-        window.location.href = "/dashboard"
+        window.location.href = "/home"
       }, 1000)
   })
 
