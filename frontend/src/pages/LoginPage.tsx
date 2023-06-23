@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import TopLoadingBar from "../components/TopLoadingBar"
+import { Link } from "react-router-dom"
 
 
 export default function LoginPage() {
@@ -7,6 +8,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
 
   // State yang menampung inputan user
+  // (kiri) input = ambil data
+  // (kanan) set = mengatur/mengubah data
   const [inputId, setInputId] = useState("")
   const [inputPassword, setInputPassword] = useState("")
 
@@ -78,27 +81,28 @@ export default function LoginPage() {
       <TopLoadingBar isLoading={isLoading}/>
 
       {/* Login form */}
-      <div className="flex flex-col h-fit w-fit bg-white bg-opacity-20 backdrop-blur-sm border border-gray-500 rounded-xl overflow-clip ml-[20%] p-[18px]">
+      <form className="flex flex-col h-fit w-fit bg-white bg-opacity-20 backdrop-blur-sm border border-gray-500 rounded-xl overflow-clip ml-[20%] p-[18px] gap-[12px]">
         
         {/* Header frame */}
-        {/* <div className="px-[24px] pt-[16px] pb-[14px]">
-          <h1 className="text-xl text-white">Masuk</h1>
-        </div> */}
-
-        {/* Input container */}
-        <div className="flex flex-col">
-          <input type="text" placeholder="ID Pengguna" onChange={e => setInputId(e.target.value)} className={inputStyle}/>
-          <input type="password" placeholder="Kata sandi" onChange={e => setInputPassword(e.target.value)} className={inputStyle}/>
+        <div className="px-[4px] py-[10px] font-semibold text-2xl text-white">
+          <h1 className="">Selamat datang!</h1>
         </div>
 
-        {/* Submit button */}
-        <button onClick={() => submitHandler()} className="bg-red-700 text-white text-lg mt-[18px] py-[6px] rounded-full hover:cursor-pointer hover:bg-red-800">Masuk</button>
+        {/* Input */}
+        <input type="text" placeholder="ID Pengguna" onChange={e => setInputId(e.target.value)} className={inputStyle}/>
+        <input type="password" placeholder="Kata sandi" onChange={e => setInputPassword(e.target.value)} className={inputStyle}/>
 
-      </div>
+        {/* Submit button | TODO: Implement enter key */}
+        <button 
+          onClick={() => submitHandler()}
+          className="bg-red-700 text-white text-lg mt-[6px] py-[6px] rounded-full hover:cursor-pointer hover:bg-red-600">Masuk</button>
+        
+        {/* Register prompt */}
+        <p className="text-stone-300 mt-[4px]">Karyawan baru? <Link to="/register" className="underline font-semibold hover:text-red-600">Klik disini</Link> untuk melakukan registrasi.</p>
+
+      </form>
     </div>
   )
 }
 
-const inputStyle = "border-2 border-gray-400 rounded-full p-[6px] my-[6px] px-[18px] focus:border-red-700 focus:outline-none"
-
-"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+const inputStyle = "border-2 border-gray-400 rounded-full p-[6px] px-[18px] focus:border-red-600 focus:outline-none"
