@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask.wrappers import Response
 from database.config import session
 from api.models import TransaksiModel
+from sqlalchemy.orm import joinedload
 
 
 # Inisiasi Blueprint
@@ -22,6 +23,9 @@ def add() -> Response:
             data["waktu_pembelian"],
             data["total_bayar"]
         )
+
+        # Join tabel trnsaksi dengan tabel pembelian
+
 
         # Tambahkan transaksi baru ke database
         session.add(transaksi)
@@ -44,7 +48,7 @@ def get_all() -> Response:
         session.commit()
 
         # Jalankan query untuk mengambil data pengguna
-        results: list[TransaksiModel] = session.query(TransaksiModel).all()
+        results: list[TransaksiModel] = session.query(TransaksiModel).option(joinedload(TransaksiModel.pembelian)).all()
 
         # Ubah hasil query (kumpulan pengguna) menjadi bentuk Python list
         list_transaksi: list[dict] = [result.get() for result in results]

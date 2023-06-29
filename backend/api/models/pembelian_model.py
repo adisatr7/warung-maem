@@ -1,5 +1,6 @@
 from sqlalchemy import Column, VARCHAR, INTEGER, DateTime, ForeignKey
 from api.models import Base
+from sqlalchemy.orm import relationship
 
 
 class PembelianModel(Base):
@@ -16,6 +17,8 @@ class PembelianModel(Base):
 
     # Kolom lainnya
     kuantitas = Column(DateTime())
+    
+    transaksi = relationship("TransaksiModel", back_populates="pembelian")
 
     # Konstruktor
     def __init__(self, id_transaksi: int, nama_pembeli: str, waktu_pembelian: DateTime, total_bayar: int) -> None:
