@@ -8,7 +8,7 @@ from api.models import PembelianModel
 pembelian_controller = Blueprint("pembelian", __name__)
 
 # Buat endpoint untuk menambahkan data
-@pembelian_controller.route("/user", methods=["POST"])
+@pembelian_controller.route("/pembelian", methods=["POST"])
 def add() -> Response:
 
     try:
@@ -37,7 +37,7 @@ def add() -> Response:
 
 
 # Buat endpoint untuk mengambil semua data pembelian
-@pembelian_controller.route("/user", methods=["GET"])
+@pembelian_controller.route("/pembelian", methods=["GET"])
 def get_all() -> Response:
 
     try:
@@ -59,14 +59,14 @@ def get_all() -> Response:
 
 
 # Buat endpoint untuk mengambil satu data pembelian berdasarkan ID-nya
-@pembelian_controller.route("/user/<string:id_user>", methods=["GET"])
-def get_by_id(id_user: str) -> Response:
+@pembelian_controller.route("/pembelian/<string:id_pembelian>", methods=["GET"])
+def get_by_id(id_pembelian: str) -> Response:
 
     try:
         session.commit()
 
         # Jalankan query untuk mengambil data pembelian
-        pembelian = session.query(PembelianModel).filter(PembelianModel.id_user == id_user).first()
+        pembelian = session.query(PembelianModel).filter(PembelianModel.id_pembelian == id_pembelian).first()
 
         # Jika pembelian tidak ditemukan, tampilkan error 404
         if not pembelian:
@@ -83,15 +83,15 @@ def get_by_id(id_user: str) -> Response:
 
 
 # Buat endpoint untuk mengubah data pembelian
-@pembelian_controller.route("/user/<string:id_user>", methods=["PUT"])
-def update(id_user: str) -> Response:
+@pembelian_controller.route("/pembelian/<string:id_pembelian>", methods=["PUT"])
+def update(id_pembelian: str) -> Response:
 
     try:
         # Ambil data dari request
         data = request.json
 
         # Jalankan query untuk mengambil data pembelian
-        pembelian = session.query(PembelianModel).filter(PembelianModel.id_user == id_user).first()
+        pembelian = session.query(PembelianModel).filter(PembelianModel.id_pembelian == id_pembelian).first()
 
         # Jika pembelian tidak ditemukan, tampilkan error 404
         if not pembelian:
@@ -117,12 +117,12 @@ def update(id_user: str) -> Response:
 
 
 # Buat endpoint untuk menghapus data pembelian
-@pembelian_controller.route("/user/<string:id_user>", methods=["DELETE"])
-def delete(id_user: str) -> Response:
+@pembelian_controller.route("/pembelian/<string:id_pembelian>", methods=["DELETE"])
+def delete(id_pembelian: str) -> Response:
 
     try:
         # Jalankan query untuk mengambil data pembelian
-        pembelian = session.query(PembelianModel).filter(PembelianModel.id_user == id_user).first()
+        pembelian = session.query(PembelianModel).filter(PembelianModel.id_pembelian == id_pembelian).first()
 
         # Jika pembelian tidak ditemukan, tampilkan error 404
         if not pembelian:
