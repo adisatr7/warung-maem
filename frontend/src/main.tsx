@@ -8,8 +8,10 @@ import Home from "./pages/Home.tsx"
 import ErrorPage from "./pages/ErrorPage.tsx"
 import LoginPage from "./pages/LoginPage.tsx"
 import Register from "./pages/Register.tsx"
+import Pembelian from "./pages/Pembelian.tsx"
 import { Provider } from "react-redux"
 import { store } from "./store"
+
 
 
 const router = createBrowserRouter([
@@ -31,6 +33,11 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: "/pembelian",
+    element: <Pembelian/>,
     errorElement: <ErrorPage/>
   },
 ])
