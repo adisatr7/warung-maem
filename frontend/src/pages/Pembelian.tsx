@@ -43,6 +43,7 @@ export default function Pembelian() {
               </tr>
             </thead>
             <tbody>
+                {/* map untuk memunculkan data */}
               { dataPembelian.map((pembelian: PembelianType, index: number) => (
                 <tr key={index}>
                   <td>{pembelian.id_transaksi}</td>

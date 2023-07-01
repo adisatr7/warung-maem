@@ -48,7 +48,7 @@ def get_all() -> Response:
         session.commit()
 
         # Jalankan query untuk mengambil data pengguna
-        results: list[TransaksiModel] = session.query(TransaksiModel).option(joinedload(TransaksiModel.pembelian)).all()
+        results: list[TransaksiModel] = session.query(TransaksiModel).options(joinedload(TransaksiModel.pembelian)).all()
 
         # Ubah hasil query (kumpulan pengguna) menjadi bentuk Python list
         list_transaksi: list[dict] = [result.get() for result in results]
