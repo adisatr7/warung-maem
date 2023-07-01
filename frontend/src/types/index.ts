@@ -6,7 +6,7 @@ export type MakananType = {
   qty?: number
 }
 
-export type PenjualanType = {
+export type PembelianType = {
   id_transaksi: string,
   nama_pembeli: string,
   waktu_pembelian: string,

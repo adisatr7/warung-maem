@@ -11,6 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import SearchIcon from "@mui/icons-material/Search"
 import LogoutIcon from "@mui/icons-material/Logout"
+import { ListItemIcon } from "@mui/material"
 
 
 export default function Navbar() {
@@ -50,6 +51,11 @@ export default function Navbar() {
 
       {/* Item-item mepet di sebelah kanan */}
       <div className="flex flex-row items-center gap-[24px]">
+
+        {/* Data Pembelian */}
+        <Link to="/pembelian" className="hover:cursor-pointer">
+          <h2 className="text-white font-semibold text-lg">Data Pembelian</h2>
+        </Link>
 
         {/* Cart */}
         <ShoppingCartIcon
