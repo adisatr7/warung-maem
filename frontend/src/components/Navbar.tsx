@@ -52,9 +52,9 @@ export default function Navbar() {
       {/* Item-item mepet di sebelah kanan */}
       <div className="flex flex-row items-center gap-[24px]">
 
-        {/* Data Pembelian */}
-        <Link to="/pembelian" className="hover:cursor-pointer">
-          <h2 className="text-white font-semibold text-lg">Data Pembelian</h2>
+        {/* Data Transaksi */}
+        <Link to="/transaksi" className="hover:cursor-pointer">
+          <h2 className="text-white font-semibold text-lg">Data Transaksi</h2>
         </Link>
 
         {/* Cart */}
