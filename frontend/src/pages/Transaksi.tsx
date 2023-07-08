@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react"
-import { TransaksiType } from "../types"
+import { MakananType, TransaksiType } from "../types"
 import useRequireAuth from "../hooks/useRequireAuth"
 import axios, {AxiosResponse} from "axios"
 import Navbar from "../components/Navbar"
+import { Link, NavLink } from "react-router-dom"
 
 
 export default function Pembelian() {
   const [dataTransaksi, setDataTransaksi] = useState<TransaksiType[]>([])
   const [inputNama, setInputNama] = useState<string>("")
-  const [inputKuantitas, setKuantitas] = useState<number>(1)
+  const [inputKuantitas, setKuantitas] = useState<number[]>([])
+  const [inputValue, setValue] = useState<number>(1)
+  const [inputNamaMakanan, setNamaMakanan] = useState<MakananType[]>([])
   const [openPopup, setOpenPopup] = useState<boolean>()
   const [tambahData, setTambahData] = useState<boolean>()
+
+  
   const hapusData = (index: number) => {
     alert ("Hapus data?")
   }
@@ -28,6 +33,14 @@ export default function Pembelian() {
     .catch(error => console.log(error))
   }
 
+  const fetchMakanan = async (id_makanan: number) => {
+    await axios.get(`http://127.0.0.1:5000/makanan/${id_makanan}`)
+    .then(hasil=> {
+      setNamaMakanan(hasil.data)
+    })
+    .catch(error => console.log(error))
+  }
+
   //menampilkan data transaksi untuk diubah atau diedit
   const updateDataTransaksi = async (id: number) => {
     await axios.put(`http://127.0.0.1:5000/transaksi/${id}`, {
@@ -39,9 +52,7 @@ export default function Pembelian() {
       fetchDataTransaksi()
     })
   }
-    
-
-
+  
   //menampilkan form atau popup untuk menambah data
 
   //menghapus data transaksi
@@ -62,50 +73,43 @@ export default function Pembelian() {
         {/* Isi halaman home */}
         <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
           
-          {/* Header label */}
-          <h1 className="text-2xl font-semibold">Data Pembelian</h1>
+        {/* Header label */}
+        <h1 className="text-2xl font-semibold">Data Transaksi</h1>
 
-          {/* Garis */}
-          <div className="w-full h-[2px] bg-red-500 my-[8px]"/>
-          <table className="w-full">
-            <thead className= "border-b-2 border-gray-300">
-              <tr>
-                <th className= {`w-[120px] ${baris}`}>ID Transaksi</th>
-                <th className= {`w-[400px] ${baris}`}>Nama</th>
-                <th className= {`w-[150px] ${baris}`}>Total</th>
-                <th className= {`w-[100px] ${baris}`}>Ubah</th>
-                <th className= "w-[100px]">Hapus</th>
-              </tr>
-            </thead>
-            <tbody className= "border-b-2">
-                {/* map untuk memunculkan data */}
-              { dataTransaksi.map((pembelian: TransaksiType, index: number) => (
-                <tr className= "border-b-2" key={index}>
-                  <td className= {`text-center w-[80px] ${baris}`}>{pembelian.id_transaksi}</td>
-                  <td className= {`${baris}py-[2px] text text-left pl-[10px]`}>{pembelian.nama_pembeli}</td>
-                  <td className= {`w-[100px] pr-[10px] ${baris} text text-right`}>{pembelian.total_bayar}</td>
-                  <td className= {`py-[2px] text text-center ${baris}`}>
-                    <button className={`${baris} bg-blue-400 text-white text-lg mt-[6px] py-[6px] w-[80px] rounded-full hover:cursor-pointer hover:bg-blue-800`}
-                    onClick={() => setOpenPopup(true)}>
-                      <p>Ubah</p>
-                    </button>
-                  </td>
-                  <td className= "py-[2px] text text-center">
-                    <button className="bg-red-400 text-white text-lg mt-[6px] py-[6px] w-[80px] rounded-full hover:cursor-pointer hover:bg-red-800"
-                    onClick={() => hapusData(index)}>
-                      <p>Hapus</p>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Garis */}
+        <div className="w-full h-[2px] bg-red-500 my-[8px]"/>
 
-          {/* Buat tombol tambah pembelian */}
+        {/* Card data pembelian */}
+        <div className="bg-gray-200 rounded-xl pt-5 pl-20 pr-40 pb-5">
+          { dataTransaksi.map((transaksi: TransaksiType, index: number) => (
+            <div>
+              <p className="text-red-500 font-bold text-xl">Nama: Jean</p>
+                <br></br>
+                <table className="w-full">
+                  <thead className="text-left">
+                  <tr>
+                    <th>Makanan: Martabak</th>
+                    <th>Harga: 25.000</th>
+                    <th>Jumlah: 2</th>
+                  </tr>
+                  </thead>
+                </table>
+                <p className="font-bold text-right mt-3 text-lg">Total: 50.000</p>
+              <br></br>
+              <p className="w-full h-[1px] bg-gray-500 "></p>
+            </div>
+          ))
+          }
+          </div>
+            
+
+        {/* Buat tombol tambah pembelian */}
+        <Link to="/home" className="hover:cursor-pointer">
           <button className= "bg-green-400 text-white text-lg mt-[6px] py-[6px] rounded-full w-[150px] text-center hover:cursor-pointer hover:bg-green-800"
             onClick={() => setTambahData(true)}>
             <p>Tambah Data</p>
           </button>
+        </Link>
 
         </div>
           {
