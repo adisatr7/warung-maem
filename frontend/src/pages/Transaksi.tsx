@@ -74,7 +74,7 @@ export default function Pembelian() {
         <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
           
         {/* Header label */}
-        <h1 className="text-2xl font-semibold">Data Transaksi</h1>
+        <h1 className="text-3xl font-semibold text-center">DATA TRANSAKSI</h1>
 
         {/* Garis */}
         <div className="w-full h-[2px] bg-red-500 my-[8px]"/>

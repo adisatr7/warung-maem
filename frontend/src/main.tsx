@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage.tsx"
 import LoginPage from "./pages/LoginPage.tsx"
 import Register from "./pages/Register.tsx"
 import Transaksi from "./pages/Transaksi.tsx"
+import Checkout from "./pages/Checkout.tsx"
 import { Provider } from "react-redux"
 import { store } from "./store"
 
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
   {
     path: "/transaksi",
     element: <Transaksi/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: "/checkout",
+    element: <Checkout/>,
     errorElement: <ErrorPage/>
   },
 ])
