@@ -11,6 +11,38 @@ export default async function Checkout() {
 
     const cart: Array<MakananType> = sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")!) : []
 
+    const axios = require('axios');
+
+    const res = await axios({
+        method: 'post',
+        url: 'http://localhost:5000/transaksi',
+        data: {
+            title: 'Making PUT request with axios'
+            status: 'published'
+        }
+    })
+
+// buat function handleTransaction()
+    const handleTransaction = async () => {
+        const data = {
+            nama: inputNama,
+            cart: cart
+        }
+        const response = await fetch("http://localhost:5000/transaksi", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+
+// buat kode untuk navigasi ke halaman data transaksi
+        if(response.ok) {
+            alert("Transaksi berhasil!")
+            window.location.href = "/transaksi"
+        }
+    }
+
 
 if(useRequireAuth())
     return (
@@ -55,9 +87,9 @@ if(useRequireAuth())
                             {/* masukkan item makanan dari keranjang belanja */}
                             {cart.map((makanan) => (
                                 <tr key={makanan.id}>
-                                    <td>{makanan.nama}</td>
+                                    {/* <td>{makanan.nama}</td>
                                     <td>{makanan.kuantitas}</td>
-                                    <td>{makanan.harga}</td>
+                                    <td>{makanan.harga}</td> */}
                                 </tr>
                             ))}
                         </tbody>

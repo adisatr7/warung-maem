@@ -53,7 +53,6 @@ INSERT INTO makanan (nama_makanan, deskripsi, url_makanan, harga) VALUES
 CREATE TABLE transaksi (
   id_transaksi      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   nama_pembeli      VARCHAR(64),
-  waktu_pembelian   DATETIME,
   total_bayar       INT
 );
 

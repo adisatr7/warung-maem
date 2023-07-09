@@ -1,4 +1,7 @@
 export type MakananType = {
+  kuantitas: ReactNode
+  id: Key | null | undefined
+  nama: ReactNode
   primary_key?: number,
   nama_makanan: string,
   harga: number
