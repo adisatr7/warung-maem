@@ -1,13 +1,13 @@
-import { Modal } from '../components/Modal';
 import { useEffect, useState } from "react"
-import { MakananType } from "../types"
-import useRequireAuth from "../hooks/useRequireAuth"
 import backgroundImage from "../assets/background-home.jpg"
+import { Modal } from '../components/Modal'
+import useRequireAuth from "../hooks/useRequireAuth"
+import { Makanan } from "../types"
 import formatHarga from "../utils/formatHarga"
 
-import { showModal, hideModal } from "../store/slices/modalSlice"
-import { addToCart } from "../store/slices/cartSlice"
 import { useAppDispatch, useAppSelector } from '../store'
+import { setCart } from "../store/slices/cartSlice"
+import { hideModal, showModal } from "../store/slices/modalSlice"
 
 import Navbar from "../components/Navbar"
 
@@ -17,7 +17,7 @@ export default function Home() {
   const [menu, setMenu] = useState([])
 
   // State untuk menampung angka sementara saat memasukkan jumlah makanan ke keranjang belanja
-  const [selectedItem, setSelectedItem] = useState<MakananType>()
+  const [selectedItem, setSelectedItem] = useState<Makanan>()
   const [tempQty, setTempQty] = useState(1)
 
   // Redux state dan reducer untuk menampilkan modal
@@ -25,6 +25,7 @@ export default function Home() {
   const cart = useAppSelector(state => state.cart.items)
   const dispatch = useAppDispatch()
 
+  
   /**
    * Fetch daftar menu makanan dari API
    */
@@ -38,14 +39,32 @@ export default function Home() {
   useEffect(() => {
     fetchMenu()
   }, [])
-  
+
 
   /**
-   * Simpan data belanjaan ke sessionStorage setiap ada perubahan di keranjang belanja secara otomatis
+   * Handler tombol untuk menambahkan item ke keranjang
    */
-  useEffect(() => {
-    sessionStorage.setItem("cart", JSON.stringify(cart))
-  }, [cart])
+  const handleAddItem = () => {
+
+    // Periksa apakah user sudah memilih item
+    if (selectedItem) {
+
+      // Pilih item yang dipilih user dan tambahkan qty-nya
+      const tempItem = selectedItem
+      tempItem.qty = tempQty
+      const tempCart = {...cart}
+      
+      // Tambahkan item ke keranjang
+      dispatch(setCart(tempCart))
+      sessionStorage.setItem("cart", JSON.stringify(cart))
+      
+      // Resest nilai qty kembali ke '1'
+      setTempQty(1)
+
+      // Sembunyikan modal/popup
+      dispatch(hideModal())
+    }
+  }
 
 
   // Jika user sudah login, tampilkan halaman home
@@ -53,7 +72,7 @@ export default function Home() {
     return (
       <div 
         style={{ backgroundImage: `url(${backgroundImage})` }}
-        className="flex flex-col bg-cover bg-stone-200 h-screen w-screen items-center justify-center bg-blend-multiply">
+        className="flex flex-col items-center justify-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply">
         <Navbar/>
         
         {/* Isi halaman home */}
@@ -67,7 +86,7 @@ export default function Home() {
 
           {/* Daftar menu makanan */}
           <div className="flex flex-row flex-wrap justify-center my-[16px] gap-[28px]">
-            { menu.map((item: MakananType, index: number) => {
+            { menu.map((item: Makanan, index: number) => {
 
               // Format harga menjadi ada titiknya
               const harga = formatHarga(item.harga)
@@ -84,7 +103,7 @@ export default function Home() {
 
                   {/* Gambar makanan */}
                   <div className="overflow-clip flex flex-[4]">
-                    <img className="w-full h-full object-cover" src={item.url_makanan}/>
+                    <img className="object-cover w-full h-full" src={item.url_makanan}/>
                   </div>
 
                   {/* Info makanan */}
@@ -118,15 +137,7 @@ export default function Home() {
                     }}
                     className="outline-none bg-gray-200 py-[6px] px-[10px] rounded-md w-full"/>
                 <button
-                  onClick={() => {
-                    if (selectedItem) {
-                      const tempItem = selectedItem
-                      tempItem.qty = tempQty
-                      dispatch(addToCart(tempItem))
-                      setTempQty(1)
-                      dispatch(hideModal())
-                    }
-                  }}
+                  onClick={handleAddItem}
                   className="bg-red-600 hover:bg-red-500 text-white font-semibold py-[6px] px-[18px] rounded-md w-full">
                   Tambah
                 </button>

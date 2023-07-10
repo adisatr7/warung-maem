@@ -14,7 +14,7 @@ def add() -> Response:
 
     try:
         # Ambil data dari request
-        data = request.json
+        data: any = request.json
 
         # Buat objek transaksi baru
         transaksi = TransaksiModel(

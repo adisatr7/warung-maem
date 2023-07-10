@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { MakananType, TransaksiType } from "../types"
+import { TransaksiType } from "../types"
 import useRequireAuth from "../hooks/useRequireAuth"
-import axios, {AxiosResponse} from "axios"
+import axios, { AxiosResponse } from "axios"
 import Navbar from "../components/Navbar"
 import { Link, NavLink } from "react-router-dom"
 
@@ -11,7 +11,7 @@ export default function Pembelian() {
   const [inputNama, setInputNama] = useState<string>("")
   const [inputKuantitas, setKuantitas] = useState<number[]>([])
   const [inputValue, setValue] = useState<number>(1)
-  const [inputNamaMakanan, setNamaMakanan] = useState<MakananType[]>([])
+  const [inputNamaMakanan, setNamaMakanan] = useState<Makanan[]>([])
   const [openPopup, setOpenPopup] = useState<boolean>()
   const [tambahData, setTambahData] = useState<boolean>()
 
@@ -66,7 +66,7 @@ export default function Pembelian() {
   if(useRequireAuth())
     return (
       <div
-        className="flex flex-col bg-cover bg-stone-200 h-screen w-screen items-center justify-center bg-blend-multiply">
+        className="flex flex-col items-center justify-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply">
 
         <Navbar/>
         
@@ -80,10 +80,10 @@ export default function Pembelian() {
         <div className="w-full h-[2px] bg-red-500 my-[8px]"/>
 
         {/* Card data pembelian */}
-        <div className="bg-gray-200 rounded-xl pt-5 pl-20 pr-40 pb-5">
+        <div className="pt-5 pb-5 pl-20 pr-40 bg-gray-200 rounded-xl">
           { dataTransaksi.map((transaksi: TransaksiType, index: number) => (
             <div>
-              <p className="text-red-500 font-bold text-xl">Nama: Jean</p>
+              <p className="text-xl font-bold text-red-500">Nama: Jean</p>
                 <br></br>
                 <table className="w-full">
                   <thead className="text-left">
@@ -94,7 +94,7 @@ export default function Pembelian() {
                   </tr>
                   </thead>
                 </table>
-                <p className="font-bold text-right mt-3 text-lg">Total: 50.000</p>
+                <p className="mt-3 text-lg font-bold text-right">Total: 50.000</p>
               <br></br>
               <p className="w-full h-[1px] bg-gray-500 "></p>
             </div>
@@ -114,7 +114,7 @@ export default function Pembelian() {
         </div>
           {
             openPopup && (
-              <div className="justify-center items-center w-screen h-screen absolute flex bg-black bg-opacity-20 backdrop-blur-sm duration-300 transition-all" onClick={() => setOpenPopup(false)}>
+              <div className="absolute flex items-center justify-center w-screen h-screen transition-all duration-300 bg-black bg-opacity-20 backdrop-blur-sm" onClick={() => setOpenPopup(false)}>
                 <div
                   onClick={(e) => e.stopPropagation()}
                   className="flex flex-col bg-white shadow-lg rounded-xl w-[500px] h-fit z-10">
@@ -123,31 +123,31 @@ export default function Pembelian() {
                     Ubah Data
                   </h3>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Nama:                    
                     </p>
                     <input onChange={(e) => setInputNama(e.target.value)} className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Makanan
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Kuantitas
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Harga
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 ml-3 mb-3 mt-3">
+                      className="mt-3 mb-3 ml-3 pl-7">
                       Total
                     </p>
                     <input className={`${kolom}`}/>
-                      <div className="w-full h-fit flex justify-center">
+                      <div className="flex justify-center w-full h-fit">
                         <button className="bg-blue-400 text-white text-lg mt-[15px] mb-[20px] py-[6px] rounded-full w-[150px] text-center hover:cursor-pointer hover:bg-blue-800">
                           <p>Ubah</p>
                         </button>
@@ -160,7 +160,7 @@ export default function Pembelian() {
 
           {
             tambahData && (
-              <div className="justify-center items-center w-screen h-screen absolute flex bg-black bg-opacity-20 backdrop-blur-sm duration-300 transition-all" onClick={() => setTambahData(false)}>
+              <div className="absolute flex items-center justify-center w-screen h-screen transition-all duration-300 bg-black bg-opacity-20 backdrop-blur-sm" onClick={() => setTambahData(false)}>
                 <div
                   onClick={(e) => e.stopPropagation()}
                   className="flex flex-col bg-white shadow-lg rounded-xl w-[500px] h-fit z-10">
@@ -169,31 +169,31 @@ export default function Pembelian() {
                     Tambahkan Data
                   </h3>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Nama:                    
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Makanan
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Kuantitas
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 m-3">
+                      className="m-3 pl-7">
                       Harga
                     </p>
                     <input className={`${kolom}`}/>
                     <p
-                      className="pl-7 ml-3 mb-3 mt-3">
+                      className="mt-3 mb-3 ml-3 pl-7">
                       Total
                     </p>
                     <input className={`${kolom}`}/>
-                      <div className="w-full h-fit flex justify-center">
+                      <div className="flex justify-center w-full h-fit">
                         <button className="bg-green-400 text-white text-lg mt-[15px] mb-[20px] py-[6px] rounded-full w-[150px] text-center hover:cursor-pointer hover:bg-green-800">
                           <p>Tambahkan</p>
                         </button>

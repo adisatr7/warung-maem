@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-import { MakananType } from "../types"
+import { Makanan } from "../types"
 import { useAppDispatch } from "../store"
 import { clearCart, changeQty } from "../store/slices/cartSlice"
 import formatHarga from "../utils/formatHarga"
@@ -17,7 +17,7 @@ import { ListItemIcon } from "@mui/material"
 export default function Navbar() {
   const [openedDropdown, setOpenedDropdown] = useState("")
 
-  const cart: Array<MakananType> = sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")!) : []
+  const cart: Array<Makanan> = sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")!) : []
   const dispatch = useAppDispatch()
 
   /**
@@ -88,7 +88,7 @@ export default function Navbar() {
             <div className="px-[18px] overflow-auto">
               {
                 // Jika keranjang belanja tidak kosong, tampilkan item-item berikut:
-                cart.length > 0 && cart.map((item: MakananType, index: number) => (
+                cart.length > 0 && cart.map((item: Makanan, index: number) => (
                   <div key={index} className="flex flex-row items-center gap-[12px] py-[12px]">
                     {/* Gambar makana */}
                     <img className="w-[64px] h-[64px] rounded-lg object-cover" src={item.url_makanan}/>

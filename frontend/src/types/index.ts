@@ -1,6 +1,9 @@
+import { ReactNode } from "react"
+
+
 export type MakananType = {
   kuantitas: ReactNode
-  id: Key | null | undefined
+  id: string,
   nama: ReactNode
   primary_key?: number,
   nama_makanan: string,

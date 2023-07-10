@@ -6,11 +6,11 @@ from api.models import Base
 
 # Inisiasi Database Engine
 print("Connecting to database...")
-engine: Engine = None
+engine: Engine | None = None
 
 # Mencoba membuat koneksi ke database
 try:
-    engine = create_engine("mysql+pymysql://root@localhost:3306/warung_maem", echo=True)
+    engine = create_engine("mysql+pymysql://admin:121995@localhost:3306/warung_maem", echo=True)
     Base.metadata.create_all(engine)
 
     # Jika berhasil, maka akan mencetak "Connected to database!"
