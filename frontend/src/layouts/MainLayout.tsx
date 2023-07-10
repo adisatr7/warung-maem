@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
 import TopNavbar from "./TopNavBar"
 import backgroundImage from "../assets/background-home.jpg"
 import SideBar from "./SideBar"
@@ -14,6 +14,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const sideBarIsShown = useAppSelector(state => state.sideBar.isShown)
   const backgroundIsDark = useAppSelector(state => state.sideBar.isBackgroundDarkened)
   const dispatch = useAppDispatch()
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(lightenBackground())
+
+      setTimeout(() => {
+        dispatch(hideSideBar())
+      }, 300)
+    }, 100)
+  }, [])
 
   
   return (

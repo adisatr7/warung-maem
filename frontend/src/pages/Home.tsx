@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../store'
 import { setCart } from "../store/slices/cartSlice"
 import { hideModal, showModal } from "../store/slices/modalSlice"
 import MainLayout from "../layouts/MainLayout"
+import { hideSideBar, lightenBackground } from "../store/slices/sideBarSlice"
 
 
 export default function Home() { 
