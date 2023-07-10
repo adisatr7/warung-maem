@@ -10,7 +10,7 @@ type ModalProps = {
   children?: React.ReactNode
 }
 
-export function Modal({ title, caption, children }: ModalProps) {
+export default function Modal({ title, caption, children }: ModalProps) {
   // State untuk menggerakan animasi modal
   const [animation, playAnimation] = useState(false)
 
@@ -43,7 +43,7 @@ export function Modal({ title, caption, children }: ModalProps) {
 
         {/* Modal contents */}
         <div className="flex flex-row justify-between">
-          <h1 className="text-2xl text-left font-bold">{title}</h1>
+          <h1 className="text-2xl font-bold text-left">{title}</h1>
           <CloseIcon className="hover:cursor-pointer" onClick={dismissModal}/>
         </div>
         <p className="text-lg">{caption}</p>

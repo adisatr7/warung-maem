@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import { TransaksiType } from "../types"
 import useRequireAuth from "../hooks/useRequireAuth"
 import axios, { AxiosResponse } from "axios"
-import Navbar from "../components/Navbar"
+import TopNavbar from "../layouts/TopNavBar"
 import { Link, NavLink } from "react-router-dom"
+import MainLayout from "../layouts/MainLayout"
 
 
 export default function Pembelian() {
@@ -65,10 +66,7 @@ export default function Pembelian() {
 
   if(useRequireAuth())
     return (
-      <div
-        className="flex flex-col items-center justify-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply">
-
-        <Navbar/>
+      <MainLayout>
         
         {/* Isi halaman home */}
         <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
@@ -203,6 +201,6 @@ export default function Pembelian() {
               </div>
             )
           }
-      </div> 
+      </MainLayout> 
     )
 }

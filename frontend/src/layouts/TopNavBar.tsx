@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
-import { Makanan } from "../types"
-import { useAppDispatch } from "../store"
-import { clearCart, changeQty } from "../store/slices/cartSlice"
+import { MakananType } from "../types"
+import { useAppDispatch, useAppSelector } from "../store"
+import { clearCart, setCart } from "../store/slices/cartSlice"
 import formatHarga from "../utils/formatHarga"
 import hitungTotalHarga from "../utils/hitungTotalHarga"
 
@@ -11,38 +11,55 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import SearchIcon from "@mui/icons-material/Search"
 import LogoutIcon from "@mui/icons-material/Logout"
-import { ListItemIcon } from "@mui/material"
+import MenuIcon from "@mui/icons-material/Menu"
+import { darkenBackground, showSideBar } from "../store/slices/sideBarSlice"
 
 
-export default function Navbar() {
+export default function TopNavbar() {
+  const navigate = useNavigate()
   const [openedDropdown, setOpenedDropdown] = useState("")
 
-  const cart: Array<Makanan> = sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")!) : []
+  const cart: MakananType[] = useAppSelector(state => state.cart.items)
   const dispatch = useAppDispatch()
 
+  
   /**
    * Meng-handle tombol logout di navbar saat di-klik
    */
-  const logoutHandler = () => {
+  const handleLogout = () => {
     sessionStorage.removeItem("activeUser")
-    window.location.href = "/"
+    navigate("/")
   }
+
+  
+  /**
+   * Meng-handle tombol untuk menampilkan SideBar
+   */
+  const handleShowSideBar = () => {
+    dispatch(showSideBar())
+    setTimeout(() => {
+      dispatch(darkenBackground())
+    }, 100)
+  }
+  
 
   return (
       /* Background */
       <div
         className="bg-gradient-to-t from-stone-900 to-stone-800 flex flex-row h-[64px] w-screen px-[24px] bg-cover justify-between shadow-md fixed top-0 z-10">
 
-      {/* Logo & title (di sebelah kiri) */}
-      <Link to="/home" className="bg-gradient-to-bl from-red-700 to-red-800 flex h-full items-center px-[24px]">
-        <h1 className="text-white font-semibold text-xl">Warung Maem</h1>
-      </Link>
+      {/* Tombol Hamburger untuk menunjukkan SideBar */}
+      <button
+        onClick={handleShowSideBar}
+        className="flex items-center h-full bg-gradient-to-bl">
+        <MenuIcon fontSize="medium" className="text-stone-300 hover:text-white"/>
+      </button>
 
       {/* Search Bar (di tengah) */}
       <div className="flex flex-row items-center bg-gray-200 px-[12px] my-[10px] rounded-md w-[550px]">
         <SearchIcon
           fontSize="medium"
-          className="hover:cursor-pointer text-gray-500"/>
+          className="text-gray-500 hover:cursor-pointer"/>
         <input 
           type="text" 
           placeholder="Cari makanan" 
@@ -52,16 +69,11 @@ export default function Navbar() {
       {/* Item-item mepet di sebelah kanan */}
       <div className="flex flex-row items-center gap-[24px]">
 
-        {/* Data Transaksi */}
-        <Link to="/transaksi" className="hover:cursor-pointer">
-          <h2 className="text-white font-semibold text-lg">Data Transaksi</h2>
-        </Link>
-
         {/* Cart */}
         <ShoppingCartIcon
           fontSize="medium"
           onClick={() => setOpenedDropdown(openedDropdown === "cart" ? "" : "cart")}
-          className={`${iconStyle} ${openedDropdown == "cart"? "text-red-600" : "text-white"}`}/>
+          className={`${iconStyle} ${openedDropdown == "cart" ? "text-white" : "text-stone-200"}`}/>
 
         {/* Cart Dropdown */}
         { openedDropdown === "cart" && (
@@ -75,7 +87,7 @@ export default function Navbar() {
                 cart.length > 0 && (
                   <button
                     onClick={() => dispatch(clearCart())}>
-                    <p className="underline text-stone-700 font-semibold hover:text-red-700">Kosongkan</p>
+                    <p className="font-semibold underline text-stone-700 hover:text-red-700">Kosongkan</p>
                   </button>
                 )
               }
@@ -88,7 +100,7 @@ export default function Navbar() {
             <div className="px-[18px] overflow-auto">
               {
                 // Jika keranjang belanja tidak kosong, tampilkan item-item berikut:
-                cart.length > 0 && cart.map((item: Makanan, index: number) => (
+                cart.length > 0 && cart.map((item: MakananType, index: number) => (
                   <div key={index} className="flex flex-row items-center gap-[12px] py-[12px]">
                     {/* Gambar makana */}
                     <img className="w-[64px] h-[64px] rounded-lg object-cover" src={item.url_makanan}/>
@@ -123,7 +135,7 @@ export default function Navbar() {
                   {/* Tombol checkout */}
                   <Link 
                     to="/checkout"
-                    className="gap-[12px] text-lg flex flex-row justify-center font-semibold text-center hover:text-red-600 underline">
+                    className="gap-[12px] text-lg flex flex-row justify-center font-semibold text-center hover:text-red-700 underline">
                     <p>Bayar sekarang</p>
                   </Link>
                 </div>      
@@ -135,12 +147,12 @@ export default function Navbar() {
         <AccountCircleIcon 
           fontSize="medium"
           onClick={() => setOpenedDropdown(openedDropdown === "profile" ? "" : "profile")}
-          className={`${iconStyle} ${openedDropdown == "profile"? "text-red-600" : "text-white"}`}/>
+          className={`${iconStyle} ${openedDropdown == "profile"? "text-stone-300" : "text-white"}`}/>
 
         {/* Profile Dropdown */}
         { openedDropdown === "profile" && (
           <button
-            onClick={logoutHandler}
+            onClick={handleLogout}
             className="absolute flex flex-row items-center pl-[18px] pr-[64px] py-[16px] gap-[12px] right-[12px] top-[64px] bg-white bg-opacity-40 backdrop-blur-xl shadow-lg rounded-xl w-fit hover:cursor-pointer hover:font-semibold text-black hover:text-red-700">
             <LogoutIcon
               fontSize="medium"
@@ -156,4 +168,4 @@ export default function Navbar() {
   )
 }
 
-const iconStyle = "hover:cursor-pointer hover:text-red-500"
+const iconStyle = "hover:cursor-pointer hover:text-white"

@@ -3,12 +3,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 
 import { cartSlice } from "./slices/cartSlice"
 import { modalSlice } from "./slices/modalSlice"
+import { sideBarSlice } from "./slices/sideBarSlice"
 
 
 export const store = configureStore({
   reducer: {
     cart: cartSlice.reducer,
-    modal: modalSlice.reducer
+    modal: modalSlice.reducer,
+    sideBar: sideBarSlice.reducer
   }
 })
 

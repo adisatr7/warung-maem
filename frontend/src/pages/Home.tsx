@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react"
-import backgroundImage from "../assets/background-home.jpg"
-import { Modal } from '../components/Modal'
+import Modal from "../components/Modal"
 import useRequireAuth from "../hooks/useRequireAuth"
-import { Makanan } from "../types"
+import { MakananType } from "../types"
 import formatHarga from "../utils/formatHarga"
 
 import { useAppDispatch, useAppSelector } from '../store'
 import { setCart } from "../store/slices/cartSlice"
 import { hideModal, showModal } from "../store/slices/modalSlice"
-
-import Navbar from "../components/Navbar"
+import MainLayout from "../layouts/MainLayout"
 
 
 export default function Home() { 
@@ -17,7 +15,7 @@ export default function Home() {
   const [menu, setMenu] = useState([])
 
   // State untuk menampung angka sementara saat memasukkan jumlah makanan ke keranjang belanja
-  const [selectedItem, setSelectedItem] = useState<Makanan>()
+  const [selectedItem, setSelectedItem] = useState<MakananType>()
   const [tempQty, setTempQty] = useState(1)
 
   // Redux state dan reducer untuk menampilkan modal
@@ -70,12 +68,9 @@ export default function Home() {
   // Jika user sudah login, tampilkan halaman home
   if(useRequireAuth())
     return (
-      <div 
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-        className="flex flex-col items-center justify-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply">
-        <Navbar/>
+      <MainLayout>
         
-        {/* Isi halaman home */}
+        {/* Content card */}
         <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
           
           {/* Header label */}
@@ -86,7 +81,7 @@ export default function Home() {
 
           {/* Daftar menu makanan */}
           <div className="flex flex-row flex-wrap justify-center my-[16px] gap-[28px]">
-            { menu.map((item: Makanan, index: number) => {
+            { menu.map((item: MakananType, index: number) => {
 
               // Format harga menjadi ada titiknya
               const harga = formatHarga(item.harga)
@@ -145,6 +140,6 @@ export default function Home() {
           </Modal>
         }
 
-      </div>
+      </MainLayout>
     )
 }

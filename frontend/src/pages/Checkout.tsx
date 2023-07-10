@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import backgroundImage from "../assets/background-home.jpg"
-import Navbar from "../components/Navbar"
+import TopNavbar from "../layouts/TopNavBar"
 import useRequireAuth from "../hooks/useRequireAuth"
 import { MakananType } from "../types"
 
@@ -77,7 +77,7 @@ export default function Checkout() {
         style={{ backgroundImage: `url(${backgroundImage})` }}
         className="flex flex-col items-center justify-center w-screen h-screen bg-no-repeat bg-cover">
       
-        <Navbar/>
+        <TopNavbar/>
         
           {/* Isi halaman home */}
           <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
