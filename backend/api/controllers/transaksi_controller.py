@@ -22,7 +22,9 @@ def add() -> Response:
 
         # Buat objek transaksi baru
         transaksi = TransaksiModel(
-            data["nama_pembeli"], data["waktu_pembelian"], data["total_bayar"]
+            data["nama_pembeli"],
+            data["waktu_pembelian"],
+            data["total_bayar"]
         )
 
         # Tambahkan transaksi baru ke database

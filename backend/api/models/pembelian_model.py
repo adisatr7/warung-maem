@@ -30,7 +30,7 @@ class PembelianModel(Base):
     transaksi = relationship("TransaksiModel", back_populates="pembelian")
 
     # Konstruktor
-    def __init__(self, id_transaksi, id_makanan, kuantitas) -> None:
+    def __init__(self, id_transaksi: int, id_makanan: str, kuantitas: int) -> None:
         self.id_transaksi = id_transaksi
         self.id_makanan = id_makanan
         self.kuantitas = kuantitas
@@ -41,5 +41,5 @@ class PembelianModel(Base):
             "id_pembelian": self.id_pembelian,
             "id_transaksi": self.id_transaksi,
             "id_makanan": self.id_makanan,
-            "kuantitas": self.kuantitas,
+            "kuantitas": self.kuantitas
         }

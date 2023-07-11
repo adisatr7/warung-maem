@@ -21,7 +21,9 @@ def add() -> Response:
 
         # Buat objek pembelian baru
         pembelian = PembelianModel(
-            data["id_transaksi"], data["id_makanan"], data["kuantitas"]
+            data["id_transaksi"],
+            data["id_makanan"],
+            data["kuantitas"]
         )
 
         # Tambahkan pembelian baru ke database
