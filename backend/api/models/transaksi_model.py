@@ -20,7 +20,7 @@ class TransaksiModel(Base):
     pembelian = relationship("PembelianModel", back_populates="transaksi")
 
     # Konstruktor
-    def __init__(self, nama_pembeli: str, waktu_pembelian: DateTime, total_bayar: int) -> None:
+    def __init__(self, nama_pembeli, waktu_pembelian, total_bayar) -> None:
         self.nama_pembeli = nama_pembeli
         self.waktu_pembelian = waktu_pembelian
         self.total_bayar = total_bayar
