@@ -21,17 +21,16 @@ class PembelianModel(Base):
     transaksi = relationship("TransaksiModel", back_populates="pembelian")
 
     # Konstruktor
-    def __init__(self, id_transaksi: int, nama_pembeli: str, waktu_pembelian: DateTime, total_bayar: int) -> None:
+    def __init__(self, id_transaksi: int, id_makanan: str, kuantitas: int) -> None:
         self.id_transaksi = id_transaksi
-        self.nama_pembeli = nama_pembeli
-        self.waktu_pembelian = waktu_pembelian
-        self.total_bayar = total_bayar
+        self.id_makanan = id_makanan
+        self.kuantitas = kuantitas
 
     # Method untuk mengonversi obyek user menjadi dictionary
     def get(self) -> dict:
         return {
+            "id_pembelian": self.id_pembelian,
             "id_transaksi": self.id_transaksi,
-            "nama_pembeli": self.nama_pembeli,
-            "waktu_pembelian": self.waktu_pembelian,
-            "total_bayar": self.total_bayar
+            "id_makanan": self.id_makanan,
+            "kuantitas": self.kuantitas
         }

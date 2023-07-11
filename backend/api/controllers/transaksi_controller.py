@@ -18,14 +18,10 @@ def add() -> Response:
 
         # Buat objek transaksi baru
         transaksi = TransaksiModel(
-            data["id_transaksi"],
             data["nama_pembeli"],
             data["waktu_pembelian"],
             data["total_bayar"]
         )
-
-        # Join tabel trnsaksi dengan tabel pembelian
-
 
         # Tambahkan transaksi baru ke database
         session.add(transaksi)
