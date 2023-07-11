@@ -14,6 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import { darkenBackground, showSideBar } from "../store/slices/sideBarSlice"
+import QtyInput from "../components/QtyInput"
 
 
 export default function TopNavbar() {
@@ -144,9 +145,7 @@ export default function TopNavbar() {
                     </div>
 
                     {/* Delete item */}
-                    <button onClick={() => handleDeleteItem(index)}>
-                      <CloseIcon fontSize="medium" className="text-stone-700 hover:text-red-600"/>
-                    </button>
+                    <QtyInput cartIndex={index}/>
                   </div>
                 ))
               }
