@@ -2,7 +2,7 @@
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import sessionmaker
 from api.models import Base
-from backend.env import DATABASE_URL, DATABASE_USER
+from env import DATABASE_URL, DATABASE_USER
 
 
 # Inisiasi Database Engine

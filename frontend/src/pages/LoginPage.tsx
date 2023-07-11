@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import axios from "axios"
 import TopLoadingBar from "../components/TopLoadingBar"
-import { Link } from "react-router-dom"
 import { redButtonStyleFull } from "../styles"
+import { API_URL } from "../../env.ts"
 
 
 export default function LoginPage() {
+  const navigate = useNavigate()
+
   // State yang menentukan apakah loading bar harus muncul atau tidak
   const [isLoading, setIsLoading] = useState(false)
 
@@ -24,15 +28,10 @@ export default function LoginPage() {
     setIsLoading(true)
 
     // Fetch data dari backend
-    await fetch(`http://127.0.0.1:5000/user/${inputId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-
-    // Ubah data yang didapat menjadi json
-    .then(res => res.json())
+    await axios.get(`${API_URL}/user/${inputId}`)
+    
+    // Jika data berhasil diambil, ubah data menjadi json
+    .then(res => res.data)
 
     // Setelah data berhasil diubah menjadi json, lakukan pengecekan password
     .then(data => {
@@ -40,7 +39,7 @@ export default function LoginPage() {
       // Jika password benar, simpan data user ke sessionStorage dan redirect user ke halaman utama
       if(data.password_login === inputPassword) {        
         sessionStorage.setItem("activeUser", JSON.stringify(true))
-        window.location.href = "/"
+        navigate("/")
       }
 
       // Jika username atau password salah, tampilkan pesan error

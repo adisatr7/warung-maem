@@ -5,7 +5,7 @@ from api.controllers.pengguna_controller import pengguna_controller
 from api.controllers.makanan_controller import makanan_controller
 from api.controllers.pembelian_controller import pembelian_controller
 from api.controllers.transaksi_controller import transaksi_controller
-from backend.env import DATABASE_URL, DATABASE_USER
+from env import DATABASE_URL, DATABASE_USER
 
 
 app = Flask(__name__)
