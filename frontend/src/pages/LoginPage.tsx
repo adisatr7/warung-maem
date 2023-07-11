@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import TopLoadingBar from "../components/TopLoadingBar"
 import { Link } from "react-router-dom"
+import { redButtonStyleFull } from "../styles"
 
 
 export default function LoginPage() {
@@ -95,10 +96,10 @@ export default function LoginPage() {
         {/* Submit button | TODO: Implement enter key */}
         <button 
           onClick={() => submitHandler()}
-          className="bg-red-700 text-white text-lg mt-[6px] py-[6px] rounded-full hover:cursor-pointer hover:bg-red-600">Masuk</button>
+          className={`${redButtonStyleFull}`}>Masuk</button>
         
         {/* Register prompt */}
-        <p className="text-stone-300 mt-[4px]">Karyawan baru? <Link to="/register" className="underline font-semibold hover:text-red-600">Klik disini</Link> untuk melakukan registrasi.</p>
+        <p className="text-stone-300 mt-[4px]">Karyawan baru? <Link to="/register" className="font-semibold underline hover:text-red-600">Klik disini</Link> untuk melakukan registrasi.</p>
 
       </form>
     </div>

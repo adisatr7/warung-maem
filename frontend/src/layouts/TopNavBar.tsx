@@ -12,16 +12,16 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import SearchIcon from "@mui/icons-material/Search"
 import LogoutIcon from "@mui/icons-material/Logout"
 import MenuIcon from "@mui/icons-material/Menu"
+import CloseIcon from "@mui/icons-material/Close"
 import { darkenBackground, showSideBar } from "../store/slices/sideBarSlice"
 
 
 export default function TopNavbar() {
   const navigate = useNavigate()
-  const [openedDropdown, setOpenedDropdown] = useState("")
-
-  const cart: MakananType[] = useAppSelector(state => state.cart.items)
   const dispatch = useAppDispatch()
+  const cart: MakananType[] = useAppSelector(state => state.cart.items)
 
+  const [openedDropdown, setOpenedDropdown] = useState("")
   
   /**
    * Meng-handle tombol logout di navbar saat di-klik
@@ -41,18 +41,35 @@ export default function TopNavbar() {
       dispatch(darkenBackground())
     }, 100)
   }
+
+  /**
+   * Meng-handle tombol untuk menghapus item dari keranjang belanja
+   */
+  const handleDeleteItem = (itemCartIndex: number) => {
+
+    // Ambil item yang akan dihapus dari keranjang belanja
+    const itemToBeDeleted = cart[itemCartIndex]
+
+    // Hapus item dari keranjang belanja
+    const tempCart = [...cart].filter(item => item !== itemToBeDeleted)
+
+    alert(`Berhasil menghapus ${itemToBeDeleted.namaMakanan} dari keranjang!`)
+
+    // Update keranjang belanja
+    dispatch(setCart(tempCart))
+    sessionStorage.setItem("cart", JSON.stringify(tempCart))
+  }
   
 
   return (
-      /* Background */
-      <div
-        className="bg-gradient-to-t from-stone-900 to-stone-800 flex flex-row h-[64px] w-screen px-[24px] bg-cover justify-between shadow-md fixed top-0 z-10">
+    /* Background */
+    <div className="bg-gradient-to-t from-stone-900 to-stone-800 flex flex-row h-[64px] w-screen px-[24px] bg-cover justify-between shadow-md fixed top-0 z-10">
 
       {/* Tombol Hamburger untuk menunjukkan SideBar */}
       <button
         onClick={handleShowSideBar}
         className="flex items-center h-full bg-gradient-to-bl">
-        <MenuIcon fontSize="medium" className="text-stone-300 hover:text-white"/>
+        <MenuIcon fontSize="medium" className="text-stone-400 hover:text-white"/>
       </button>
 
       {/* Search Bar (di tengah) */}
@@ -70,10 +87,21 @@ export default function TopNavbar() {
       <div className="flex flex-row items-center gap-[24px]">
 
         {/* Cart */}
-        <ShoppingCartIcon
-          fontSize="medium"
-          onClick={() => setOpenedDropdown(openedDropdown === "cart" ? "" : "cart")}
-          className={`${iconStyle} ${openedDropdown == "cart" ? "text-white" : "text-stone-200"}`}/>
+        <div className="relative">
+          <ShoppingCartIcon
+            fontSize="medium"
+            onClick={() => setOpenedDropdown(openedDropdown === "cart" ? "" : "cart")}
+            className={`${iconStyle} ${openedDropdown == "cart" ? "text-stone-100" : "text-stone-400"}`}/>
+
+          {/* Jika keranjang belanja ada isinya, tampilkan badge jumlah belanjaan */}
+          {
+            cart.length > 0 && (
+              <div className="absolute -top-2 -right-2 bg-red-500 rounded-full w-[20px] h-[20px] flex justify-center items-center">
+                <p className="text-white text-xs">{cart.length}</p>
+              </div>
+            )
+          }
+        </div>
 
         {/* Cart Dropdown */}
         { openedDropdown === "cart" && (
@@ -97,26 +125,35 @@ export default function TopNavbar() {
             <div className="h-[1px] w-full bg-gray-500"/>
 
             {/* Isi keranjang belanja */}
-            <div className="px-[18px] overflow-auto">
+            <div className="overflow-auto">
               {
                 // Jika keranjang belanja tidak kosong, tampilkan item-item berikut:
                 cart.length > 0 && cart.map((item: MakananType, index: number) => (
-                  <div key={index} className="flex flex-row items-center gap-[12px] py-[12px]">
+                  <div 
+                    key={index} 
+                    className="flex flex-row items-center gap-[12px] mx-[9px] px-[9px] py-[12px] hover:bg-white hover:bg-opacity-30 rounded-md">
+                      
                     {/* Gambar makana */}
-                    <img className="w-[64px] h-[64px] rounded-lg object-cover" src={item.url_makanan}/>
-                    <div className="flex flex-col gap-[4px]">
+                    <img className="w-[64px] h-[64px] rounded-lg object-cover"  src={item.urlMakanan}/>
+                    
+                    <div className="flex flex-col gap-[4px] w-full">
                       {/* Nama makanan */}
-                      <p className="text-lg font-semibold">{item.nama_makanan}</p>
+                      <p className="text-lg font-semibold">{item.namaMakanan}</p>
                       {/* Harga (subtotal) */}
                       <p className="text-sm">Rp {formatHarga(item.harga)} (x{item.qty})</p>
                     </div>
+
+                    {/* Delete item */}
+                    <button onClick={() => handleDeleteItem(index)}>
+                      <CloseIcon fontSize="medium" className="text-stone-700 hover:text-red-600"/>
+                    </button>
                   </div>
                 ))
               }
               {
                 // Jika keranjang belanja kosong, tampilkan pesan berikut:
                 cart.length === 0 && 
-                <p className="py-[38px] text-lg">Keranjang belanja Anda kosong!</p> 
+                <p className="my-[38px] mx-[18px] text-lg">Keranjang belanja Anda kosong!</p> 
               }
             </div>
             {
@@ -147,7 +184,7 @@ export default function TopNavbar() {
         <AccountCircleIcon 
           fontSize="medium"
           onClick={() => setOpenedDropdown(openedDropdown === "profile" ? "" : "profile")}
-          className={`${iconStyle} ${openedDropdown == "profile"? "text-stone-300" : "text-white"}`}/>
+          className={`${iconStyle} ${openedDropdown == "profile" ? "text-stone-100" : "text-stone-400"}`}/>
 
         {/* Profile Dropdown */}
         { openedDropdown === "profile" && (

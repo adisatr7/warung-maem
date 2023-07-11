@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react"
+import axios from "axios"
 import Modal from "../components/Modal"
 import useRequireAuth from "../hooks/useRequireAuth"
 import { MakananType } from "../types"
 import formatHarga from "../utils/formatHarga"
 
+import ContentCard from "../layouts/ContentCard"
+import MainLayout from "../layouts/MainLayout"
 import { useAppDispatch, useAppSelector } from '../store'
 import { setCart } from "../store/slices/cartSlice"
 import { hideModal, showModal } from "../store/slices/modalSlice"
-import MainLayout from "../layouts/MainLayout"
-import { hideSideBar, lightenBackground } from "../store/slices/sideBarSlice"
+
 
 
 export default function Home() { 
   // Daftar menu makanan
-  const [menu, setMenu] = useState([])
+  const [menu, setMenu] = useState<MakananType[]>([])
 
   // State untuk menampung angka sementara saat memasukkan jumlah makanan ke keranjang belanja
   const [selectedItem, setSelectedItem] = useState<MakananType>()
@@ -29,9 +31,30 @@ export default function Home() {
    * Fetch daftar menu makanan dari API
    */
   const fetchMenu = async () => {
-    const response = await fetch("http://127.0.0.1:5000/makanan")
-    const data = await response.json()
-    setMenu(data)
+    try {
+      // Ambil data dari API
+      const response = await axios.get("http://127.0.0.1:5000/makanan")
+
+      // Format data yang didapat dari API agar sesuai dengan tipe data MakananType
+      const fetchedData: MakananType[] = []
+      response.data.forEach((item: any) => {
+        fetchedData.push({
+          id: item.id_makanan,
+          namaMakanan: item.nama_makanan,
+          deskripsi: item.deskripsi,
+          urlMakanan: item.url_makanan,
+          harga: item.harga
+        })
+
+        // Simpan data yang sudah diformat ke state
+        setMenu(fetchedData)
+      })
+    } 
+    
+    // Tampilkan error jika gagal mengambil data dari API
+    catch (error) {
+      alert(error)
+    }
   }
   
   // Lakukan fetch saat pertama kali komponen dirender
@@ -49,13 +72,14 @@ export default function Home() {
     if (selectedItem) {
 
       // Pilih item yang dipilih user dan tambahkan qty-nya
-      const tempItem = selectedItem
+      const tempItem: MakananType = {...selectedItem}
       tempItem.qty = tempQty
-      const tempCart = {...cart}
+      const tempCart: MakananType[] = [...cart]
+      tempCart.push(tempItem)
       
       // Tambahkan item ke keranjang
       dispatch(setCart(tempCart))
-      sessionStorage.setItem("cart", JSON.stringify(cart))
+      sessionStorage.setItem("cart", JSON.stringify(tempCart))
       
       // Resest nilai qty kembali ke '1'
       setTempQty(1)
@@ -70,15 +94,7 @@ export default function Home() {
   if(useRequireAuth())
     return (
       <MainLayout>
-        
-        {/* Content card */}
-        <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
-          
-          {/* Header label */}
-          <h1 className="text-2xl font-semibold">Menu makanan</h1>
-
-          {/* Garis */}
-          <div className="w-full h-[2px] bg-red-500 my-[8px]"/>
+        <ContentCard pageTitle="Menu Makanan">
 
           {/* Daftar menu makanan */}
           <div className="flex flex-row flex-wrap justify-center my-[16px] gap-[28px]">
@@ -99,23 +115,23 @@ export default function Home() {
 
                   {/* Gambar makanan */}
                   <div className="overflow-clip flex flex-[4]">
-                    <img className="object-cover w-full h-full" src={item.url_makanan}/>
+                    <img className="object-cover w-full h-full" src={item.urlMakanan}/>
                   </div>
 
                   {/* Info makanan */}
                   <div className="flex-[1] mx-[10px] my-[6px]">
-                    <h1 className="text-lg font-semibold">{item.nama_makanan}</h1>
+                    <h1 className="text-lg font-semibold">{item.namaMakanan}</h1>
                     <p className="text-md">Rp{harga}</p>
                   </div>
                 </div>
               )}
             )}
           </div>
-        </div>
+        </ContentCard>
 
         {/* Modal */}
         { modalIsShowing &&
-          <Modal 
+          <Modal
             title="Masukkan Jumlah"
             caption="Berapa banyak makanan yang ingin Anda beli?">
               <form

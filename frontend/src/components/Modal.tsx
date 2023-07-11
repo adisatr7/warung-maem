@@ -31,10 +31,11 @@ export default function Modal({ title, caption, children }: ModalProps) {
     playAnimation(true)
   }, [])
 
+  
   return (
     <button
       onClick={dismissModal}
-      className={`fixed bg-black hover:cursor-default flex justify-center items-center h-screen w-screen transition-all z-10 ${animation? "bg-opacity-60 backdrop-blur-md" : "bg-opacity-0 backdrop-blur-0"} duration-500`}>
+      className={`fixed bg-black left-0 top-0 hover:cursor-default flex justify-center items-center h-screen w-screen transition-all z-10 ${animation? "bg-opacity-60 backdrop-blur-md" : "bg-opacity-0 backdrop-blur-0"} duration-500`}>
 
       {/* The modal popup itself */}
       <div 

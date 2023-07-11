@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { Makanan } from "../../types"
+import { MakananType } from "../../types"
 
 export interface CartStateType {
-  items: Array<Makanan>
+  items: Array<MakananType>
 }
 
 const initialState: CartStateType = {
@@ -18,7 +18,7 @@ export const cartSlice = createSlice({
     /**
      * Menambahkan makanan ke keranjang belanja
      */
-    setCart: (state, action: PayloadAction<Makanan[]>) => {
+    setCart: (state, action: PayloadAction<MakananType[]>) => {
       state.items = action.payload
     },
 

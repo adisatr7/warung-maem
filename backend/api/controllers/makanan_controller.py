@@ -19,9 +19,9 @@ def add() -> Response:
         makanan = MakananModel(
             data["id_makanan"],
             data["nama_makanan"],
-            data["harga"],
-            data["stok"],
-            data["id_kategori"]
+            data["deskripsi"],
+            data["url_makanan"],
+            data["harga"]
         )
 
         # Tambahkan makanan baru ke database
