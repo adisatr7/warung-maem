@@ -176,13 +176,18 @@ export default function Checkout() {
                     onChange={(e) => setUangInput(parseInt(e.target.value))}
                     className={`${textInputStyle} w-[100px]`}/>
                 </div>
-                { uangInput > 0 && (
+                { uangInput > 0 && uangInput >= calculateTotalPrice() && (
                     <div className="flex items-center justify-end gap-[12px] border-gray-300">
                       <p className="text-lg">Kembalian:</p>
                       <p className="text-lg font-bold w-[100px]">Rp {formatHarga(kembalian)}</p>
                     </div>
                 )}
-                <div className="flex flex-row w-full justify-end">
+                { uangInput > 0 && uangInput < calculateTotalPrice() && (
+                    <div className="flex items-center justify-end gap-[12px] border-gray-300">
+                      <p className="text-lg font-bold text-red-600">Uang tidak cukup!</p>
+                    </div>
+                )}
+                <div className="flex flex-row justify-end w-full">
                   <button
                     onClick={handleCheckout} 
                     className={`${redButtonStyle} w-fit`}>Bayar Sekarang</button>
