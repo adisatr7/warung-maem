@@ -30,7 +30,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div 
       style={{ backgroundImage: `url(${backgroundImage})` }}
-      className="fixed flex flex-col items-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply">
+      className="fixed flex flex-col items-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply overflow-y-scroll">
       
       <TopNavbar/>
       <SideBar/>
@@ -49,7 +49,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       }
 
       {/* Utk nampung apapun yg dijepit di dalem <>...</> */}
-      <div className="pt-[100px]">
+      <div className="pt-[100px] pb-[60px]">
         {children}
       </div>
 

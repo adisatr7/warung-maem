@@ -10,3 +10,5 @@ export const redButtonStyle = "bg-red-700 text-white text-lg mt-[6px] py-[6px] r
 export const redButtonStyleFit = `${redButtonStyle} w-fit`
 
 export const redButtonStyleFull = `${redButtonStyle} w-full`
+
+export const textInputStyle = "appearance-none px-3 border border-gray-300 rounded-md text-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent py-[4px]"
