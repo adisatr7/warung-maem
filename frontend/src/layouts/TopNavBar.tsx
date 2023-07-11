@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { MakananType } from "../types"
 import { useAppDispatch, useAppSelector } from "../store"
-import { clearCart, setCart } from "../store/slices/cartSlice"
+import { clearCart } from "../store/slices/cartSlice"
 import formatHarga from "../utils/formatHarga"
 import hitungTotalHarga from "../utils/hitungTotalHarga"
 
@@ -12,7 +12,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import SearchIcon from "@mui/icons-material/Search"
 import LogoutIcon from "@mui/icons-material/Logout"
 import MenuIcon from "@mui/icons-material/Menu"
-import CloseIcon from "@mui/icons-material/Close"
 import { darkenBackground, showSideBar } from "../store/slices/sideBarSlice"
 import QtyInput from "../components/QtyInput"
 
@@ -41,24 +40,6 @@ export default function TopNavbar() {
     setTimeout(() => {
       dispatch(darkenBackground())
     }, 100)
-  }
-
-  /**
-   * Meng-handle tombol untuk menghapus item dari keranjang belanja
-   */
-  const handleDeleteItem = (itemCartIndex: number) => {
-
-    // Ambil item yang akan dihapus dari keranjang belanja
-    const itemToBeDeleted = cart[itemCartIndex]
-
-    // Hapus item dari keranjang belanja
-    const tempCart = [...cart].filter(item => item !== itemToBeDeleted)
-
-    alert(`Berhasil menghapus ${itemToBeDeleted.namaMakanan} dari keranjang!`)
-
-    // Update keranjang belanja
-    dispatch(setCart(tempCart))
-    sessionStorage.setItem("cart", JSON.stringify(tempCart))
   }
   
 

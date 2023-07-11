@@ -3,7 +3,6 @@ from api.models import Base
 
 
 class PenggunaModel(Base):
-
     # Nama Tabel
     __tablename__ = "pengguna"
 
@@ -17,7 +16,7 @@ class PenggunaModel(Base):
     no_telp = Column(VARCHAR(12))
 
     # Konstruktor
-    def __init__(self, id_user: str, nama_user: str, password_login: str, alamat: str, no_telp: str) -> None:
+    def __init__(self, id_user, nama_user, password_login, alamat, no_telp) -> None:
         self.id_user = id_user
         self.nama_user = nama_user
         self.password_login = password_login
@@ -31,5 +30,5 @@ class PenggunaModel(Base):
             "nama_user": self.nama_user,
             "password_login": self.password_login,
             "alamat": self.alamat,
-            "no_telp": self.no_telp
+            "no_telp": self.no_telp,
         }
