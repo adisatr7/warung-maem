@@ -17,6 +17,7 @@ class TransaksiModel(Base):
     waktu_pembelian = Column(DateTime())
     total_bayar = Column(INTEGER())
 
+    # Relational Mapping
     pembelian = relationship("PembelianModel", back_populates="transaksi")
 
     # Konstruktor

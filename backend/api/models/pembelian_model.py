@@ -27,7 +27,9 @@ class PembelianModel(Base):
     # Kolom lainnya
     kuantitas = Column(DateTime())
 
+    # Relationship Mapping
     transaksi = relationship("TransaksiModel", back_populates="pembelian")
+    makanan = relationship("MakananModel", back_populates="pembelian")
 
     # Konstruktor
     def __init__(self, id_transaksi, id_makanan, kuantitas) -> None:

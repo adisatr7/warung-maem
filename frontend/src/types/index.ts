@@ -11,5 +11,6 @@ export type TransaksiType = {
   id_transaksi: string
   nama_pembeli: string
   waktu_pembelian: string
-  total_bayar: number
+  total_bayar: number,
+  pembelian: MakananType[]
 }

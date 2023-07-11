@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask.wrappers import Response
+from api.models.makanan_model import MakananModel
+from api.models.pembelian_model import PembelianModel
 from database.config import session
 from api.models import TransaksiModel
 from sqlalchemy.orm import joinedload
@@ -22,9 +24,7 @@ def add() -> Response:
 
         # Buat objek transaksi baru
         transaksi = TransaksiModel(
-            data["nama_pembeli"],
-            data["waktu_pembelian"],
-            data["total_bayar"]
+            data["nama_pembeli"], data["waktu_pembelian"], data["total_bayar"]
         )
 
         # Tambahkan transaksi baru ke database
@@ -48,20 +48,61 @@ def get_all() -> Response:
     try:
         session.commit()
 
-        # Jalankan query untuk mengambil data pengguna
-        results: list[TransaksiModel] = (
-            session.query(TransaksiModel)
-            .options(joinedload(TransaksiModel.pembelian))
+        # Jalankan query untuk mengambil data transaksi beserta pembelian dan makanan terkait
+        results: list = (
+            session.query(
+                TransaksiModel.id_transaksi,
+                TransaksiModel.nama_pembeli,
+                TransaksiModel.waktu_pembelian,
+                TransaksiModel.total_bayar,
+                MakananModel.id_makanan,
+                MakananModel.nama_makanan,
+                MakananModel.harga,
+                MakananModel.deskripsi,
+                MakananModel.url_makanan,
+                PembelianModel.kuantitas,
+            )
+            .join(TransaksiModel.pembelian)
+            .join(PembelianModel.makanan)
             .all()
         )
 
-        # Ubah hasil query (kumpulan pengguna) menjadi bentuk Python list
-        list_transaksi: list[dict] = [result.get() for result in results]
+        # Buat dictionary baru untuk menyimpan data transaksi
+        transaksi_dict = {}
 
-        # Ubah Python list menjadi bentuk JSON
+        # Looping untuk setiap hasil query
+        for result in results:
+            id_transaksi = result.id_transaksi
+
+            # Jika id_transaksi belum ada di dictionary, maka buat dictionary baru
+            if id_transaksi not in transaksi_dict:
+                transaksi_dict[id_transaksi] = {
+                    "id_transaksi": id_transaksi,
+                    "nama_pembeli": result.nama_pembeli,
+                    "waktu_pembelian": result.waktu_pembelian,
+                    "total_bayar": result.total_bayar,
+                    "pembelian": [],
+                }
+
+            # Buat dictionary baru untuk menyimpan data makanan
+            makanan_data = {
+                "id": str(result.id_makanan),
+                "namaMakanan": result.nama_makanan,
+                "harga": result.harga,
+                "deskripsi": result.deskripsi,
+                "urlMakanan": result.url_makanan,
+                "qty": result.kuantitas,
+            }
+
+            # Tambahkan data makanan ke dictionary transaksi
+            transaksi_dict[id_transaksi]["pembelian"].append(makanan_data)
+
+        # Ambil list dari dictionary transaksi
+        list_transaksi = list(transaksi_dict.values())
+
+        # Convert the list to JSON and return the response
         return jsonify(list_transaksi)
 
-    # Jika terjadi error, tampilkan pesan error-nya
     except Exception as e:
         print(f"Error occurred while retrieving data: {e}")
         return jsonify(

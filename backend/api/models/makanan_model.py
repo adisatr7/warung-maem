@@ -1,4 +1,5 @@
 from sqlalchemy import Column, VARCHAR, INTEGER, Text
+from sqlalchemy.orm import relationship
 from api.models import Base
 
 
@@ -14,6 +15,9 @@ class MakananModel(Base):
     deskripsi = Column(Text())
     url_makanan = Column(Text())
     harga = Column(INTEGER())
+
+    # Relational Mapping
+    pembelian = relationship("PembelianModel", back_populates="makanan")
 
     # Konstruktor
     def __init__(self, nama_makanan, deskripsi, url_makanan, harga) -> None:
