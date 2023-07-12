@@ -1,20 +1,21 @@
-import { Modal } from '../components/Modal';
 import { useEffect, useState } from "react"
-import { MakananType } from "../types"
+import axios from "axios"
+import Modal from "../components/Modal"
 import useRequireAuth from "../hooks/useRequireAuth"
-import backgroundImage from "../assets/background-home.jpg"
+import { MakananType } from "../types"
 import formatHarga from "../utils/formatHarga"
 
-import { showModal, hideModal } from "../store/slices/modalSlice"
-import { addToCart } from "../store/slices/cartSlice"
+import ContentCard from "../layouts/ContentCard"
+import MainLayout from "../layouts/MainLayout"
 import { useAppDispatch, useAppSelector } from '../store'
+import { setCart } from "../store/slices/cartSlice"
+import { hideModal, showModal } from "../store/slices/modalSlice"
 
-import Navbar from "../components/Navbar"
 
 
 export default function Home() { 
   // Daftar menu makanan
-  const [menu, setMenu] = useState([])
+  const [menu, setMenu] = useState<MakananType[]>([])
 
   // State untuk menampung angka sementara saat memasukkan jumlah makanan ke keranjang belanja
   const [selectedItem, setSelectedItem] = useState<MakananType>()
@@ -25,45 +26,75 @@ export default function Home() {
   const cart = useAppSelector(state => state.cart.items)
   const dispatch = useAppDispatch()
 
+  
   /**
    * Fetch daftar menu makanan dari API
    */
   const fetchMenu = async () => {
-    const response = await fetch("http://127.0.0.1:5000/makanan")
-    const data = await response.json()
-    setMenu(data)
+    try {
+      // Ambil data dari API
+      const response = await axios.get("http://127.0.0.1:5000/makanan")
+
+      // Format data yang didapat dari API agar sesuai dengan tipe data MakananType
+      const fetchedData: MakananType[] = []
+      response.data.forEach((item: any) => {
+        fetchedData.push({
+          id: item.id_makanan,
+          namaMakanan: item.nama_makanan,
+          deskripsi: item.deskripsi,
+          urlMakanan: item.url_makanan,
+          harga: item.harga
+        })
+
+        // Simpan data yang sudah diformat ke state
+        setMenu(fetchedData)
+      })
+    } 
+    
+    // Tampilkan error jika gagal mengambil data dari API
+    catch (error) {
+      alert(error)
+    }
   }
   
   // Lakukan fetch saat pertama kali komponen dirender
   useEffect(() => {
     fetchMenu()
   }, [])
-  
+
 
   /**
-   * Simpan data belanjaan ke sessionStorage setiap ada perubahan di keranjang belanja secara otomatis
+   * Handler tombol untuk menambahkan item ke keranjang
    */
-  useEffect(() => {
-    sessionStorage.setItem("cart", JSON.stringify(cart))
-  }, [cart])
+  const handleAddItem = () => {
+
+    // Periksa apakah user sudah memilih item
+    if (selectedItem) {
+
+      // Pilih item yang dipilih user dan tambahkan qty-nya
+      const tempItem: MakananType = {...selectedItem}
+      tempItem.qty = tempQty
+      const tempCart: MakananType[] = [...cart]
+      tempCart.push(tempItem)
+      
+      // Tambahkan item ke keranjang
+      dispatch(setCart(tempCart))
+      sessionStorage.setItem("cart", JSON.stringify(tempCart))
+      
+      // Resest nilai qty kembali ke '1'
+      setTempQty(1)
+
+      // Sembunyikan modal/popup
+      dispatch(hideModal())
+    }
+  }
 
 
   // Jika user sudah login, tampilkan halaman home
   if(useRequireAuth())
     return (
-      <div 
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-        className="flex flex-col bg-cover bg-stone-200 h-screen w-screen items-center justify-center bg-blend-multiply">
-        <Navbar/>
-        
-        {/* Isi halaman home */}
-        <div className="flex flex-col bg-white mt-[36px] h-fit w-[1060px] rounded-xl px-[36px] py-[18px] justify-center drop-shadow-xl">
-          
-          {/* Header label */}
-          <h1 className="text-2xl font-semibold">Menu makanan</h1>
-
-          {/* Garis */}
-          <div className="w-full h-[2px] bg-red-500 my-[8px]"/>
+      <MainLayout>
+        <ContentCard pageTitle="Menu Makanan">
 
           {/* Daftar menu makanan */}
           <div className="flex flex-row flex-wrap justify-center my-[16px] gap-[28px]">
@@ -84,23 +115,23 @@ export default function Home() {
 
                   {/* Gambar makanan */}
                   <div className="overflow-clip flex flex-[4]">
-                    <img className="w-full h-full object-cover" src={item.url_makanan}/>
+                    <img className="object-cover w-full h-full" src={item.urlMakanan}/>
                   </div>
 
                   {/* Info makanan */}
                   <div className="flex-[1] mx-[10px] my-[6px]">
-                    <h1 className="text-lg font-semibold">{item.nama_makanan}</h1>
+                    <h1 className="text-lg font-semibold">{item.namaMakanan}</h1>
                     <p className="text-md">Rp{harga}</p>
                   </div>
                 </div>
               )}
             )}
           </div>
-        </div>
+        </ContentCard>
 
         {/* Modal */}
         { modalIsShowing &&
-          <Modal 
+          <Modal
             title="Masukkan Jumlah"
             caption="Berapa banyak makanan yang ingin Anda beli?">
               <form
@@ -118,15 +149,7 @@ export default function Home() {
                     }}
                     className="outline-none bg-gray-200 py-[6px] px-[10px] rounded-md w-full"/>
                 <button
-                  onClick={() => {
-                    if (selectedItem) {
-                      const tempItem = selectedItem
-                      tempItem.qty = tempQty
-                      dispatch(addToCart(tempItem))
-                      setTempQty(1)
-                      dispatch(hideModal())
-                    }
-                  }}
+                  onClick={handleAddItem}
                   className="bg-red-600 hover:bg-red-500 text-white font-semibold py-[6px] px-[18px] rounded-md w-full">
                   Tambah
                 </button>
@@ -134,6 +157,6 @@ export default function Home() {
           </Modal>
         }
 
-      </div>
+      </MainLayout>
     )
 }

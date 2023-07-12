@@ -2,15 +2,16 @@
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import sessionmaker
 from api.models import Base
+from env import DATABASE_URL, DATABASE_USER
 
 
 # Inisiasi Database Engine
 print("Connecting to database...")
-engine: Engine = None
+engine: Engine | None = None
 
 # Mencoba membuat koneksi ke database
 try:
-    engine = create_engine("mysql+pymysql://root@localhost:3306/warung_maem", echo=True)
+    engine = create_engine(F"mysql+pymysql://{DATABASE_USER}@{DATABASE_URL}", echo=True)
     Base.metadata.create_all(engine)
 
     # Jika berhasil, maka akan mencetak "Connected to database!"

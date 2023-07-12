@@ -4,34 +4,44 @@ from sqlalchemy.orm import relationship
 
 
 class PembelianModel(Base):
-
     # Nama Tabel
     __tablename__ = "pembelian"
 
     # Primary Key
-    id_pembelian = Column(INTEGER(), primary_key=True, nullable=False, autoincrement=True)
+    id_pembelian = Column(
+        INTEGER(), primary_key=True, nullable=False, autoincrement=True
+    )
 
     # Foreign Keys
-    id_transaksi = Column(INTEGER(), ForeignKey("transaksi.id_transaksi", ondelete="CASCADE"), nullable=False)
-    id_makanan = Column(VARCHAR(64), ForeignKey("makanan.id_makanan", ondelete="CASCADE"), nullable=False)
+    id_transaksi = Column(
+        INTEGER(),
+        ForeignKey("transaksi.id_transaksi", ondelete="CASCADE"),
+        nullable=False,
+    )
+    id_makanan = Column(
+        VARCHAR(64),
+        ForeignKey("makanan.id_makanan", ondelete="CASCADE"),
+        nullable=False,
+    )
 
     # Kolom lainnya
     kuantitas = Column(DateTime())
-    
+
+    # Relationship Mapping
     transaksi = relationship("TransaksiModel", back_populates="pembelian")
+    makanan = relationship("MakananModel", back_populates="pembelian")
 
     # Konstruktor
-    def __init__(self, id_transaksi: int, nama_pembeli: str, waktu_pembelian: DateTime, total_bayar: int) -> None:
+    def __init__(self, id_transaksi, id_makanan, kuantitas) -> None:
         self.id_transaksi = id_transaksi
-        self.nama_pembeli = nama_pembeli
-        self.waktu_pembelian = waktu_pembelian
-        self.total_bayar = total_bayar
+        self.id_makanan = id_makanan
+        self.kuantitas = kuantitas
 
     # Method untuk mengonversi obyek user menjadi dictionary
     def get(self) -> dict:
         return {
+            "id_pembelian": self.id_pembelian,
             "id_transaksi": self.id_transaksi,
-            "nama_pembeli": self.nama_pembeli,
-            "waktu_pembelian": self.waktu_pembelian,
-            "total_bayar": self.total_bayar
+            "id_makanan": self.id_makanan,
+            "kuantitas": self.kuantitas,
         }

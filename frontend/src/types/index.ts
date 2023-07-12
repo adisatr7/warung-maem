@@ -1,7 +1,16 @@
 export type MakananType = {
-  primary_key?: number,
-  nama_makanan: string,
+  id: string
+  namaMakanan: string
   harga: number
-  url_makanan: string,
+  deskripsi: string
+  urlMakanan: string
   qty?: number
+}
+
+export type TransaksiType = {
+  idTransaksi: string
+  namaPembeli: string
+  waktuPembelian: string
+  totalBayar: number
+  pembelian: MakananType[]
 }

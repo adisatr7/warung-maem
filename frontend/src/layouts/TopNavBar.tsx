@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { MakananType } from "../types"
-import { useAppDispatch } from "../store"
-import { clearCart, changeQty } from "../store/slices/cartSlice"
+import { useAppDispatch, useAppSelector } from "../store"
+import { clearCart } from "../store/slices/cartSlice"
 import formatHarga from "../utils/formatHarga"
 import hitungTotalHarga from "../utils/hitungTotalHarga"
 
@@ -11,37 +11,54 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import SearchIcon from "@mui/icons-material/Search"
 import LogoutIcon from "@mui/icons-material/Logout"
+import MenuIcon from "@mui/icons-material/Menu"
+import { darkenBackground, showSideBar } from "../store/slices/sideBarSlice"
+import QtyInput from "../components/QtyInput"
 
 
-export default function Navbar() {
-  const [openedDropdown, setOpenedDropdown] = useState("")
-
-  const cart: Array<MakananType> = sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")!) : []
+export default function TopNavbar() {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const cart: MakananType[] = useAppSelector(state => state.cart.items)
 
+  const [openedDropdown, setOpenedDropdown] = useState("")
+  
   /**
    * Meng-handle tombol logout di navbar saat di-klik
    */
-  const logoutHandler = () => {
+  const handleLogout = () => {
     sessionStorage.removeItem("activeUser")
-    window.location.href = "/"
+    navigate("/")
   }
 
-  return (
-      /* Background */
-      <div
-        className="bg-gradient-to-t from-stone-900 to-stone-800 flex flex-row h-[64px] w-screen px-[24px] bg-cover justify-between shadow-md fixed top-0 z-10">
+  
+  /**
+   * Meng-handle tombol untuk menampilkan SideBar
+   */
+  const handleShowSideBar = () => {
+    dispatch(showSideBar())
+    setTimeout(() => {
+      dispatch(darkenBackground())
+    }, 100)
+  }
+  
 
-      {/* Logo & title (di sebelah kiri) */}
-      <Link to="/home" className="bg-gradient-to-bl from-red-700 to-red-800 flex h-full items-center px-[24px]">
-        <h1 className="text-white font-semibold text-xl">Warung Maem</h1>
-      </Link>
+  return (
+    /* Background */
+    <div className="bg-gradient-to-t from-stone-900 to-stone-800 flex flex-row h-[64px] w-screen px-[24px] bg-cover justify-between shadow-md fixed top-0 z-10">
+
+      {/* Tombol Hamburger untuk menunjukkan SideBar */}
+      <button
+        onClick={handleShowSideBar}
+        className="flex items-center h-full bg-gradient-to-bl">
+        <MenuIcon fontSize="medium" className="text-stone-400 hover:text-white"/>
+      </button>
 
       {/* Search Bar (di tengah) */}
       <div className="flex flex-row items-center bg-gray-200 px-[12px] my-[10px] rounded-md w-[550px]">
         <SearchIcon
           fontSize="medium"
-          className="hover:cursor-pointer text-gray-500"/>
+          className="text-gray-500 hover:cursor-pointer"/>
         <input 
           type="text" 
           placeholder="Cari makanan" 
@@ -52,10 +69,21 @@ export default function Navbar() {
       <div className="flex flex-row items-center gap-[24px]">
 
         {/* Cart */}
-        <ShoppingCartIcon
-          fontSize="medium"
-          onClick={() => setOpenedDropdown(openedDropdown === "cart" ? "" : "cart")}
-          className={`${iconStyle} ${openedDropdown == "cart"? "text-red-600" : "text-white"}`}/>
+        <div className="relative">
+          <ShoppingCartIcon
+            fontSize="medium"
+            onClick={() => setOpenedDropdown(openedDropdown === "cart" ? "" : "cart")}
+            className={`${iconStyle} ${openedDropdown == "cart" ? "text-stone-100" : "text-stone-400"}`}/>
+
+          {/* Jika keranjang belanja ada isinya, tampilkan badge jumlah belanjaan */}
+          {
+            cart.length > 0 && (
+              <div className="absolute -top-2 -right-2 bg-red-500 rounded-full w-[20px] h-[20px] flex justify-center items-center">
+                <p className="text-xs text-white">{cart.length}</p>
+              </div>
+            )
+          }
+        </div>
 
         {/* Cart Dropdown */}
         { openedDropdown === "cart" && (
@@ -69,7 +97,7 @@ export default function Navbar() {
                 cart.length > 0 && (
                   <button
                     onClick={() => dispatch(clearCart())}>
-                    <p className="underline text-stone-700 font-semibold hover:text-red-700">Kosongkan</p>
+                    <p className="font-semibold underline text-stone-700 hover:text-red-700">Kosongkan</p>
                   </button>
                 )
               }
@@ -79,26 +107,33 @@ export default function Navbar() {
             <div className="h-[1px] w-full bg-gray-500"/>
 
             {/* Isi keranjang belanja */}
-            <div className="px-[18px] overflow-auto">
+            <div className="overflow-auto">
               {
                 // Jika keranjang belanja tidak kosong, tampilkan item-item berikut:
                 cart.length > 0 && cart.map((item: MakananType, index: number) => (
-                  <div key={index} className="flex flex-row items-center gap-[12px] py-[12px]">
+                  <div 
+                    key={index} 
+                    className="flex flex-row items-center gap-[12px] mx-[9px] px-[9px] py-[12px] hover:bg-white hover:bg-opacity-30 rounded-md">
+                      
                     {/* Gambar makana */}
-                    <img className="w-[64px] h-[64px] rounded-lg object-cover" src={item.url_makanan}/>
-                    <div className="flex flex-col gap-[4px]">
+                    <img className="w-[64px] h-[64px] rounded-lg object-cover"  src={item.urlMakanan}/>
+                    
+                    <div className="flex flex-col gap-[4px] w-full">
                       {/* Nama makanan */}
-                      <p className="text-lg font-semibold">{item.nama_makanan}</p>
+                      <p className="text-lg font-semibold">{item.namaMakanan}</p>
                       {/* Harga (subtotal) */}
                       <p className="text-sm">Rp {formatHarga(item.harga)} (x{item.qty})</p>
                     </div>
+
+                    {/* Delete item */}
+                    <QtyInput cartIndex={index}/>
                   </div>
                 ))
               }
               {
                 // Jika keranjang belanja kosong, tampilkan pesan berikut:
                 cart.length === 0 && 
-                <p className="py-[38px] text-lg">Keranjang belanja Anda kosong!</p> 
+                <p className="my-[38px] mx-[18px] text-lg">Keranjang belanja Anda kosong!</p> 
               }
             </div>
             {
@@ -108,7 +143,7 @@ export default function Navbar() {
                   {/* Total harga */}
                   <div className="flex flex-row w-fit items-center justify-between gap-[6px]">
                     <p className="text-lg">Total:</p>
-                    <p className="text-lg font-semibold">Rp {hitungTotalHarga(cart)}</p>
+                    <p className="text-lg font-semibold">Rp {formatHarga(hitungTotalHarga())}</p>
                   </div>
 
                   {/* Garis vertikal */}
@@ -117,7 +152,7 @@ export default function Navbar() {
                   {/* Tombol checkout */}
                   <Link 
                     to="/checkout"
-                    className="gap-[12px] text-lg flex flex-row justify-center font-semibold text-center hover:text-red-600 underline">
+                    className="gap-[12px] text-lg flex flex-row justify-center font-semibold text-center hover:text-red-700 underline">
                     <p>Bayar sekarang</p>
                   </Link>
                 </div>      
@@ -129,12 +164,12 @@ export default function Navbar() {
         <AccountCircleIcon 
           fontSize="medium"
           onClick={() => setOpenedDropdown(openedDropdown === "profile" ? "" : "profile")}
-          className={`${iconStyle} ${openedDropdown == "profile"? "text-red-600" : "text-white"}`}/>
+          className={`${iconStyle} ${openedDropdown == "profile" ? "text-stone-100" : "text-stone-400"}`}/>
 
         {/* Profile Dropdown */}
         { openedDropdown === "profile" && (
           <button
-            onClick={logoutHandler}
+            onClick={handleLogout}
             className="absolute flex flex-row items-center pl-[18px] pr-[64px] py-[16px] gap-[12px] right-[12px] top-[64px] bg-white bg-opacity-40 backdrop-blur-xl shadow-lg rounded-xl w-fit hover:cursor-pointer hover:font-semibold text-black hover:text-red-700">
             <LogoutIcon
               fontSize="medium"
@@ -150,4 +185,4 @@ export default function Navbar() {
   )
 }
 
-const iconStyle = "hover:cursor-pointer hover:text-red-500"
+const iconStyle = "hover:cursor-pointer hover:text-white"

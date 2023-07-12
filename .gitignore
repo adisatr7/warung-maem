@@ -19,6 +19,8 @@ logs/
 
 # Ignore environment variables file
 .env
+**/env.py
+**/env.ts
 
 # Ignore IDE specific files
 .vscode/

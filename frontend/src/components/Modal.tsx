@@ -10,7 +10,7 @@ type ModalProps = {
   children?: React.ReactNode
 }
 
-export function Modal({ title, caption, children }: ModalProps) {
+export default function Modal({ title, caption, children }: ModalProps) {
   // State untuk menggerakan animasi modal
   const [animation, playAnimation] = useState(false)
 
@@ -31,10 +31,11 @@ export function Modal({ title, caption, children }: ModalProps) {
     playAnimation(true)
   }, [])
 
+  
   return (
     <button
       onClick={dismissModal}
-      className={`fixed bg-black hover:cursor-default flex justify-center items-center h-screen w-screen transition-all z-10 ${animation? "bg-opacity-60 backdrop-blur-md" : "bg-opacity-0 backdrop-blur-0"} duration-500`}>
+      className={`fixed bg-black left-0 top-0 hover:cursor-default flex justify-center items-center h-screen w-screen transition-all z-10 ${animation? "bg-opacity-60 backdrop-blur-md" : "bg-opacity-0 backdrop-blur-0"} duration-500`}>
 
       {/* The modal popup itself */}
       <div 
@@ -43,7 +44,7 @@ export function Modal({ title, caption, children }: ModalProps) {
 
         {/* Modal contents */}
         <div className="flex flex-row justify-between">
-          <h1 className="text-2xl text-left font-bold">{title}</h1>
+          <h1 className="text-2xl font-bold text-left">{title}</h1>
           <CloseIcon className="hover:cursor-pointer" onClick={dismissModal}/>
         </div>
         <p className="text-lg">{caption}</p>
