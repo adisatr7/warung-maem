@@ -46,6 +46,16 @@ export default function Register() {
     style={{ backgroundImage: "url(https://img.freepik.com/free-photo/healthy-breakfast-black-wooden-background-top-view-free-space-your-text_24972-410.jpg?w=1060)" }}
     className="bg-black bg-cover bg-no-repeat justify-center items-center flex flex-row bg-gray-900 w-screen h-screen">
       <div className="flex flex-col flex-1 mx-[400px] ml-[100px]">
+        
+        {/* Tombol kembali */}
+        <button
+          onClick={() => navigate("/login")}
+          className="flex items-center h-full bg-gradient-to-bl">
+          <svg xmlns="http://www.w3.org/2000/svg" className="mb-[40px] h-6 w-6 text-stone-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
         <h1 className="text-white font-bold text-3xl">Buat Akun</h1>
         <input
           type="text"
