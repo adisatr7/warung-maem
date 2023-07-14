@@ -1,18 +1,68 @@
+import axios from "axios";
 import { useState } from "react";
+import { API_URL } from "../../env";
+import { redButtonStyleFull } from "../styles";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [inputNama, setNama] = useState("");
+  const [inputId, setId] = useState("");
   const [inputTelp, setTelp] = useState("");
   const [inputAlamat, setAlamat] = useState("");
   const [inputPassword, setPassword] = useState("");
   const [inputConfirmPw, setConfirmPw] = useState("");
 
-  const submitHandler = () => {};
+  
+  /**
+   * Handler ketika user menekan tombol "Masuk"
+   */
+  const registerHandler = async() => {
+
+    // Masukkan data dari form register ke database
+    await axios.post(`${API_URL}/user`, {
+      id_user: inputId,
+      nama_user: inputNama,
+      password_login: inputPassword,
+      alamat: inputAlamat,
+      no_telp: inputTelp,
+    })
+
+    // Jika berhasil, redirect user ke halaman login
+    .then((res) => {
+      alert("Berhasil membuat akun!")
+      navigate("/login")
+    })
+
+    // Jika terjadi error, tampilkan error
+    .catch((err: any) => {
+      console.log(err)
+      alert(err)
+    })
+  }  
 
   return (
-    <div className="items-center flex flex-col bg-gray-900 w-screen h-screen">
-      <h1 className="text-white font-bold mt-10 text-3xl">Buat Akun</h1>
-      <div className="flex flex-col mt-8 w-[300px]">
+    <div 
+    style={{ backgroundImage: "url(https://img.freepik.com/free-photo/healthy-breakfast-black-wooden-background-top-view-free-space-your-text_24972-410.jpg?w=1060)" }}
+    className="bg-black bg-cover bg-no-repeat justify-center items-center flex flex-row bg-gray-900 w-screen h-screen">
+      <div className="flex flex-col flex-1 mx-[400px] ml-[100px]">
+        
+        {/* Tombol kembali */}
+        <button
+          onClick={() => navigate("/login")}
+          className="flex items-center h-full bg-gradient-to-bl">
+          <svg xmlns="http://www.w3.org/2000/svg" className="mb-[40px] h-6 w-6 text-stone-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <h1 className="text-white font-bold text-3xl">Buat Akun</h1>
+        <input
+          type="text"
+          placeholder="ID User"
+          onChange={(e) => setId(e.target.value)}
+          className={inputStyle}
+        />
         <input
           type="text"
           placeholder="Nama lengkap"
@@ -43,13 +93,12 @@ export default function Register() {
           onChange={(e) => setConfirmPw(e.target.value)}
           className={inputStyle}
         />
-        <button
-          onClick={() => submitHandler()}
-          className="bg-red-700 text-white text-lg mt-[18px] py-[6px] rounded-full hover:cursor-pointer hover:bg-red-800"
-        >
-          Buat Akun
-        </button>
+        <button 
+          onClick={() => registerHandler()}
+          className={`${redButtonStyleFull}`}>Buat Akun</button>
+    
       </div>
+      <div className="flex-1"/>
     </div>
   );
 }
