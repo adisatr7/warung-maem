@@ -76,8 +76,7 @@ export default function TopNavbar() {
             className={`${iconStyle} ${openedDropdown == "cart" ? "text-stone-100" : "text-stone-400"}`}/>
 
           {/* Jika keranjang belanja ada isinya, tampilkan badge jumlah belanjaan */}
-          {
-            cart.length > 0 && (
+          { cart.length > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-500 rounded-full w-[20px] h-[20px] flex justify-center items-center">
                 <p className="text-xs text-white">{cart.length}</p>
               </div>
@@ -143,7 +142,7 @@ export default function TopNavbar() {
                   {/* Total harga */}
                   <div className="flex flex-row w-fit items-center justify-between gap-[6px]">
                     <p className="text-lg">Total:</p>
-                    <p className="text-lg font-semibold">Rp {formatHarga(hitungTotalHarga())}</p>
+                    <p className="text-lg font-semibold">Rp {formatHarga(hitungTotalHarga(cart))}</p>
                   </div>
 
                   {/* Garis vertikal */}
@@ -156,7 +155,8 @@ export default function TopNavbar() {
                     <p>Bayar sekarang</p>
                   </Link>
                 </div>      
-              )}
+              )
+            }
           </div>
         )}
 

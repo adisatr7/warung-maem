@@ -7,7 +7,7 @@ from env import DATABASE_URL, DATABASE_USER
 
 # Inisiasi Database Engine
 print("Connecting to database...")
-engine: Engine | None = None
+engine: Engine = None
 
 # Mencoba membuat koneksi ke database
 try:
