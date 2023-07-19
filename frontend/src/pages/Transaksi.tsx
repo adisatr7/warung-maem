@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { API_URL } from "../../env"
 import formatHarga from "../utils/formatHarga"
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Transaksi() {
   const navigate = useNavigate()
@@ -121,7 +121,7 @@ export default function Transaksi() {
                     </div>
 
                     <DeleteIcon onClick={() => deleteHandler(transaksi.idTransaksi)} className="hover:cursor-pointer text-red-400 hover:text-red-800"/>
-  
+                    <EditIcon onClick={() => navigate(`/checkout/${transaksi.idTransaksi}`)} className="hover:cursor-pointer text-blue-400 hover:text-blue-800"/>
                   </div>
 
                   {/* Daftar barang-barang yang dibeli dan harganya masing-masing */}
