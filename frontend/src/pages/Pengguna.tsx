@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { PenggunaType } from "../types"
-import {}  from "../layouts/ContentCard"
+import ContentCard, {}  from "../layouts/ContentCard"
 import MainLayout from "../layouts/MainLayout"
 import useRequireAuth from "../hooks/useRequireAuth"
 
 export default function Pengguna() {
     const [pengguna, setPengguna] = useState<PenggunaType[]>([])
 
-}
+    const fetchPengguna = async () => {
+        try {
+            const response = await axios.get("http://127.0.0.1:5000")
 
-const fetchPengguna = async () => {
-    try {
-        const response = await axios.get("http://127.0.0.1:5000")
+            const fetchedData: PenggunaType[] = []
+            response.data.forEach((item: any) => {
+                fetchedData.push({
+                    id_user: id_user,
+                    nama_user: nama_user,
+                    password_login: password_login,
+                    alamat: alamat,
+                    no_telp: no_telp
+                })
 
-        const fetchedData: PenggunaType[] = []
-        response.data.forEach((item: any) => {
-            fetchedData.push({
-                id: id_user,
-                nama: nama_user,
-                password: password_login,
-                alamat: alamat,
-                no_telp: no_telp
+                setPengguna(fetchedData)
             })
+        }
 
-            setPengguna(fetchedData)
-        })
+        catch (error) {
+            alert(error)
+        }
     }
 
-    catch (error) {
-        alert(error)
+    useEffect(() => {
+        fetchPengguna()
     }
-}
-
-useEffect(() => {
-    fetchPengguna()
-}
-    , [])
+        , [])
 
 if(useRequireAuth())
     return (
@@ -60,9 +58,9 @@ if(useRequireAuth())
                                     </thead>
                                     <tbody>
                                         {dataPengguna.map((pengguna: PenggunaType) => (
-                                          <tr key={pengguna.id}>
-                                            <td>{pengguna.id}</td>
-                                            <td>{pengguna.nama}</td>
+                                          <tr key={pengguna.id_user}>
+                                            <td>{pengguna.id_user}</td>
+                                            <td>{pengguna.nama_user}</td>
                                             <td>{pengguna.password_login}</td>
                                             <td>{pengguna.alamat}</td>
                                             <td>{pengguna.no_telp}</td>
@@ -79,4 +77,5 @@ if(useRequireAuth())
             </ContentCard>
         </MainLayout>
     )
-)
+  )
+}
