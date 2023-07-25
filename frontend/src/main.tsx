@@ -12,6 +12,7 @@ import Transaksi from "./pages/Transaksi.tsx"
 import Checkout from "./pages/Checkout.tsx"
 import { Provider } from "react-redux"
 import { store } from "./store"
+import Pengguna from "./pages/Pengguna.tsx"
 
 
 
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
   {
     path: "/checkout",
     element: <Checkout/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: "/pengguna",
+    element: <Pengguna/>,
     errorElement: <ErrorPage/>
   },
 ])

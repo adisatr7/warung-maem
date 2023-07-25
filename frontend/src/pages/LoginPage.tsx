@@ -44,7 +44,7 @@ export default function LoginPage() {
 
       // Jika username atau password salah, tampilkan pesan error
       else {
-        console.log(data)
+        // console.log(data)
         alert("Gagal: Username atau password salah!")
       }
     })

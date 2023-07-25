@@ -1,11 +1,9 @@
-import { useAppSelector } from "../store"
 import { MakananType } from "../types"
 
 /**
  * Menghitung total harga dari semua makanan di keranjang belanja
  */
-export default function hitungTotalHarga(): number {
-  const cart: MakananType[] = useAppSelector((state) => state.cart.items)
+export default function hitungTotalHarga(cart: MakananType[]): number {
 
   let totalHarga: number = 0
 

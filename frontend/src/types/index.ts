@@ -14,3 +14,11 @@ export type TransaksiType = {
   totalBayar: number
   pembelian: MakananType[]
 }
+
+export type PenggunaType = {
+  id_user: string
+  nama_user: string
+  password_login: string
+  alamat: string
+  no_telp: string
+}

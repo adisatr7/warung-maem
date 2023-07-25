@@ -7,13 +7,24 @@ import ContentCard from "../layouts/ContentCard"
 import { useNavigate } from "react-router-dom"
 import { API_URL } from "../../env"
 import formatHarga from "../utils/formatHarga"
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Transaksi() {
   const navigate = useNavigate()
 
   const [transaksi, setTransaksi] = useState<TransaksiType[]>([])
 
+  const deleteHandler = async(idTransaksi: string) => {
+    await axios.delete(`${API_URL}/transaksi/${idTransaksi}`)
+      .then(res => {
+        alert("Transaksi berhasil dihapus!")
+        fetchTransaksi()
+      })
+      .catch(err => {
+        alert(err)
+      })
+  }
 
   /**
    * Fetch data transaksi dari API
@@ -108,6 +119,9 @@ export default function Transaksi() {
                       <p className={grayInfoText}>Nomor Transaksi</p>
                       <p className={blackText}>{transaksi.idTransaksi}</p>
                     </div>
+
+                    <DeleteIcon onClick={() => deleteHandler(transaksi.idTransaksi)} className="hover:cursor-pointer text-red-400 hover:text-red-800"/>
+                    <EditIcon onClick={() => navigate(`/checkout/${transaksi.idTransaksi}`)} className="hover:cursor-pointer text-blue-400 hover:text-blue-800"/>
                   </div>
 
                   {/* Daftar barang-barang yang dibeli dan harganya masing-masing */}
