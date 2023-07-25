@@ -29,7 +29,14 @@ export default function SideBar() {
   const handleGoToHome = () => {
     navigate("/home")
   }
-    
+  
+  
+  /**
+   * Handler untuk berpindah ke halaman Pengguna
+   */
+  const handleGoToUser = () => {
+    navigate("/pengguna")
+  }
   
   /**
    * Handler untuk berpindah ke halaman Transaksi
@@ -55,7 +62,8 @@ export default function SideBar() {
       </div>
 
       <button onClick={handleGoToHome} className={textStyle}>Beranda</button>
-      <button onClick={handleGoToTransaction} className={textStyle}>Transaksi</button>
+      <button onClick={handleGoToTransaction} className={textStyle}>Data Transaksi</button>
+      <button onClick={handleGoToUser} className={textStyle}>Data Pengguna</button>
       {/* <button className={textStyle}></button> */}
 
     </div>
