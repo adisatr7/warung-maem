@@ -15,7 +15,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const backgroundIsDark = useAppSelector(state => state.sideBar.isBackgroundDarkened)
   const dispatch = useAppDispatch()
 
-
+  // Utk animasi sidebar dan efek gelap saat sidebar muncul
   useEffect(() => {
     setTimeout(() => {
       dispatch(lightenBackground())
@@ -30,13 +30,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div 
       style={{ backgroundImage: `url(${backgroundImage})` }}
-      className="fixed flex flex-col items-center w-screen h-screen bg-cover bg-stone-200 bg-blend-multiply overflow-y-scroll">
+      className="fixed flex flex-col items-center w-screen h-screen overflow-y-scroll bg-cover bg-stone-200 bg-blend-multiply">
       
       <TopNavbar/>
       <SideBar/>
       
-      {
-        sideBarIsShown && 
+      { sideBarIsShown && 
         <div
           onClick={() => {
             dispatch(lightenBackground())
