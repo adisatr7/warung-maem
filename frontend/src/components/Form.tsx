@@ -6,7 +6,7 @@ import { useState } from "react"
 type FormInputPropsType = {
   label: string,
   value: string,
-  setValue: (value: string) => void,
+  setValue?: (value: string) => void,
   isPassword?: boolean
   isVisible?: boolean
   setIsVisible?: (value: boolean) => void
@@ -14,7 +14,7 @@ type FormInputPropsType = {
 }
 
 
-export default function Form ({ label, value, setValue, isPassword=false, isVisible=false, setIsVisible, disabled: isDisabled=false }: FormInputPropsType) {
+export default function Form ({ label, value, setValue=()=>{}, isPassword=false, isVisible=false, setIsVisible, disabled=false }: FormInputPropsType) {
 
   // Utk menentukan apakah kolom inputan sedang diklik; utk keperluan styling
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -28,17 +28,17 @@ export default function Form ({ label, value, setValue, isPassword=false, isVisi
       {/* Text label */}
       <p className="w-fit">{label}</p>
       
-      <div className={`flex flex-row items-center border rounded-md px-[12px] py-[4px] gap-[8px] ${isFocused ? "border-red-500" : "border-gray-300"} ${isDisabled && "bg-gray-200"}`}>
+      <div className={`flex flex-row items-center border rounded-md px-[12px] py-[4px] gap-[8px] ${isFocused ? "border-red-500" : "border-gray-300"} ${disabled && "bg-gray-200"}`}>
 
         {/* Kolom inputan */}
         <input
           type={isPassword && !isVisible ? "password" : "text"}
           value={value}
-          disabled={isDisabled}
+          disabled={disabled}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onChange={(e) => setValue(e.target.value)}
-          className={`w-full focus:outline-none ${isDisabled && "text-gray-600"} ${isDisabled && "hover:cursor-not-allowed"}`}/>
+          onChange={e => setValue(e.target.value)}
+          className={`w-full focus:outline-none ${disabled && "text-gray-600"} ${disabled && "hover:cursor-not-allowed"}`}/>
 
         {/* Tombol hide/show password */}
         { setIsVisible && (isVisible
@@ -47,7 +47,7 @@ export default function Form ({ label, value, setValue, isPassword=false, isVisi
         )}
       </div>
 
-      { isDisabled &&
+      { disabled &&
         <p className="mt-[4px] text-sm text-left text-gray-400">
           {label} tidak dapat diganti.
         </p>

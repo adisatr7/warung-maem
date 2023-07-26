@@ -34,7 +34,7 @@ export default function Modal({ title, caption, children }: ModalProps) {
   
   return (
     <button
-      onClick={dismissModal}
+      // onClick={dismissModal} // Ada bug, jadi di-disable dulu
       className={`fixed bg-black left-0 top-0 hover:cursor-default flex justify-center items-center h-screen w-screen transition-all z-10 ${animation? "bg-opacity-60 backdrop-blur-md" : "bg-opacity-0 backdrop-blur-0"} duration-500`}>
 
       {/* The modal popup itself */}
@@ -45,7 +45,7 @@ export default function Modal({ title, caption, children }: ModalProps) {
         {/* Modal contents */}
         <div className="flex flex-row justify-between">
           <h1 className="text-2xl font-bold text-left">{title}</h1>
-          <CloseIcon className="hover:cursor-pointer" onClick={dismissModal}/>
+          <CloseIcon className="text-gray-600 hover:cursor-pointer hover:text-black" onClick={dismissModal}/>
         </div>
         <p className="text-lg">{caption}</p>
         {children}
